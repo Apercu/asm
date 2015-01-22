@@ -18,22 +18,49 @@
 #include <stdio.h>
 #include "libftasm.h"
 
-int main (void)
+
+void check_bzero (void)
 {
   char str[4] = "aaa\0";
 
-  printf("str: %s\n", str);
-  printf("size %d\n", (int)ft_strlen(NULL));
-
+  printf("str before bzero: %s\n", str);
   ft_bzero(&str, 4);
+  printf("str after  bzero: %s\n", str);
 
-  printf("str: %s\n", str);
+  //ft_bzero(NULL, 31);
+  printf("-----------------\n");
+}
 
-  printf("str[0]: %c\n", str[0]);
-  printf("str[1]: %c\n", str[1]);
-  printf("str[2]: %c\n", str[2]);
-  printf("str[3]: %c\n", str[3]);
+void check_strlen (void)
+{
+  char str[4] = "aaa\0";
 
+  printf("should be 3 = %d\n", (int)ft_strlen(str));
+  ft_bzero(&str, 4);
+  printf("should be 0 = %d\n", (int)ft_strlen(str));
+  //printf("should be 0 = %d\n", (int)ft_strlen(NULL));
+  printf("-----------------\n");
+}
+
+void check_alpha (void)
+{
+  printf("should be alpha %d\n", ft_isalpha('A'));
+  printf("should be alpha %d\n", ft_isalpha('Z'));
+  printf("should be alpha %d\n", ft_isalpha('B'));
+  printf("should be alpha %d\n", ft_isalpha('a'));
+  printf("should be alpha %d\n", ft_isalpha('z'));
+  printf("should be alpha %d\n", ft_isalpha('b'));
+  printf("should not be alpha %d\n", ft_isalpha('.'));
+  printf("should not be alpha %d\n", ft_isalpha('0'));
+  printf("-----------------\n");
+}
+
+
+int main (void)
+{
+  check_bzero();
+  check_strlen();
+  check_alpha();
 
   return 0;
 }

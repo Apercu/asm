@@ -20,21 +20,14 @@ global _ft_strlen
 section .text
 
 _ft_strlen:
-  push rbp
-  mov rbp, rsp
-  mov rbx, 0
-  cmp rdi, 0
-  jle out
+
+  xor rax, rax
 
 looping:
-  cmp byte [rdi], 0
-  jle out
-  inc rbx
-  inc rdi
+  cmp byte [rdi + rax], 0
+  je out
+  inc rax
   jmp looping
 
 out:
-  mov rax, rbx
-  mov rsp, rbp
-  pop rbp
   ret

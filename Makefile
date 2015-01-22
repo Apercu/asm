@@ -22,7 +22,8 @@ NASM_FLAGS = -f macho64
 
 NASM_FILES = ft_puts.s \
 						 ft_bzero.s \
-						 ft_strlen.s
+						 ft_strlen.s \
+						 ft_isalpha.s \
 
 DIR_SRC    = srcs/libfts
 DIR_OBJ    = .obj

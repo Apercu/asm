@@ -15,19 +15,28 @@
 ;                                                                              ;
 ; ============================================================================ ;
 
-global _ft_bzero
+global _ft_isalpha
 
 section .text
 
-_ft_bzero:
-  xor rcx, rcx
+_ft_isalpha:
 
-looping:
-  cmp rcx, rsi
-  je out
-  mov byte [rdi + rcx], 0
-  inc rcx
-  jmp looping
+  xor rax, rax
+
+  cmp rdi, 'A'
+  jl out
+  cmp rdi, 'Z'
+  jg lower
+  mov rax, 1
+  jmp out
+
+lower:
+
+  cmp rdi, 'a'
+  jl out
+  cmp rdi, 'z'
+  jg out
+  mov rax, 1
 
 out:
   ret

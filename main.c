@@ -55,12 +55,28 @@ void check_alpha (void)
   printf("-----------------\n");
 }
 
+void check_digit (void)
+{
+  printf("should not be digit %d\n", ft_isdigit('A'));
+  printf("should not be digit %d\n", ft_isdigit('Z'));
+  printf("should not be digit %d\n", ft_isdigit('B'));
+  printf("should not be digit %d\n", ft_isdigit('a'));
+  printf("should not be digit %d\n", ft_isdigit('z'));
+  printf("should not be digit %d\n", ft_isdigit('b'));
+  printf("should not be digit %d\n", ft_isdigit('.'));
+  printf("should not be digit %d\n", ft_isdigit('`'));
+  printf("should be digit %d\n", ft_isdigit('0'));
+  printf("should be digit %d\n", ft_isdigit('9'));
+  printf("should be digit %d\n", ft_isdigit('4'));
+  printf("-----------------\n");
+}
 
 int main (void)
 {
   check_bzero();
   check_strlen();
   check_alpha();
+  check_digit();
 
   return 0;
 }

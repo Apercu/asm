@@ -25,6 +25,7 @@ NASM_FILES = ft_puts.s \
 						 ft_strlen.s \
 						 ft_isalpha.s \
 						 ft_isdigit.s \
+						 ft_isalnum.s \
 
 DIR_SRC    = srcs/libfts
 DIR_OBJ    = .obj

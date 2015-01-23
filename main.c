@@ -151,6 +151,25 @@ void check_print (void)
     printf("-----------------\n\n");
 }
 
+void check_toupper (void)
+{
+    printf("----- PRINT -----\n");
+
+    printf("should be uppered %c\n", ft_toupper('a'));
+    printf("should be uppered %c\n", ft_toupper('z'));
+    printf("should be uppered %c\n", ft_toupper('b'));
+
+    printf("should stay as is %c\n", ft_toupper('A'));
+    printf("should stay as is %c\n", ft_toupper('Z'));
+    printf("should stay as is %c\n", ft_toupper('B'));
+    printf("should stay as is %c\n", ft_toupper('0'));
+    printf("should stay as is %c\n", ft_toupper('9'));
+    printf("should stay as is %c\n", ft_toupper('4'));
+    printf("should stay as is %c\n", ft_toupper('.'));
+    printf("should stay as is %c\n", ft_toupper('`'));
+
+    printf("-----------------\n\n");
+}
 
 
 int main (void)
@@ -162,6 +181,7 @@ int main (void)
   check_alnum();
   check_ascii();
   check_print();
+  check_toupper();
 
   return 0;
 }

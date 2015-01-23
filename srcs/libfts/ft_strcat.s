@@ -3,7 +3,7 @@
 ;     ██╗  ██╗██████╗                                                          ;
 ;     ██║  ██║╚════██╗                                                         ;
 ;     ███████║ █████╔╝              created by: bgronon                        ;
-;     ╚════██║██╔═══╝                       at: 2015-01-23 11:08:02            ;
+;     ╚════██║██╔═══╝                       at: 2015-01-23 11:53:42            ;
 ;          ██║███████╗                                                         ;
 ;          ╚═╝╚══════╝                                                         ;
 ;     ███████╗ █████╗ ██╗   ██╗ █████╗ ████████╗████████╗ █████╗ ███████╗      ;
@@ -17,39 +17,35 @@
 
 extern _ft_strlen
 
-global _ft_puts
+global _ft_strcat
 
 section .text
 
-_ft_puts:
+_ft_strcat:
 
   mov rcx, rdi
+
   call _ft_strlen
 
-  mov rdx, rax
-  mov rax, 0x2000004
-  mov rdi, 1
-  mov rsi, rcx
-  syscall
+  mov rcx, rax ; lenght of s1
+  xor rax, rax ; cpt
 
-  cmp rax, 1
-  jne error
+while:
+  cmp byte [rdi + rax], 0
+  je out
 
-  mov rax, 0x2000004
-  mov rdi, 1
-  mov rsi, newline
-  mov rdx, 1
-  syscall
+;  mov al, byte [rsi + rax]
+;  add rax, rcx
 
-  cmp rax, 1
-  jne error
+  mov byte [rdi + rax], 'a'
 
+;  sub rax, rcx
+
+
+  inc rax
+  jmp while
+
+out:
+  ;add rax, [rcx]
+  ;mov byte [rdi + rax], 0
   ret
-
-error:
-  mov rax, -1
-  ret
-
-section .data
-
-newline: db 0xa

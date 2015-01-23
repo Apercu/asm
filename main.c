@@ -208,9 +208,12 @@ void check_strcat (void)
 {
     printf("----- STRCAT ------\n");
 
-    char one[5] = "This ";
-    char two[11] = " with this.";
-    printf("should be concatenated %s\n", ft_strcat(one, two));
+    char two[12] = " with this.\0";
+    char one[6] = "This \0";
+
+    ft_strcat(two, one);
+    printf("test %s\n", ft_strcat(two, one));
+    //printf("should be concatenated %s\n", ft_strcat(two, one));
 
     printf("-----------------\n\n");
 }
@@ -229,7 +232,7 @@ int main (void)
   check_toupper();
   check_tolower();
   check_puts();
-//  check_strcat();
+  check_strcat();
 
   return 0;
 }

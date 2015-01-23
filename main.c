@@ -43,6 +43,7 @@ void check_strlen (void)
   ft_bzero(&str, 4);
   printf("should be 0 = %d\n", (int)ft_strlen(str));
   //printf("should be 0 = %d\n", (int)ft_strlen(NULL));
+
   printf("-----------------\n\n");
 }
 
@@ -58,6 +59,7 @@ void check_alpha (void)
   printf("should be alpha %d\n", ft_isalpha('b'));
   printf("should not be alpha %d\n", ft_isalpha('.'));
   printf("should not be alpha %d\n", ft_isalpha('0'));
+
   printf("-----------------\n\n");
 }
 
@@ -76,6 +78,7 @@ void check_digit (void)
   printf("should be digit %d\n", ft_isdigit('0'));
   printf("should be digit %d\n", ft_isdigit('9'));
   printf("should be digit %d\n", ft_isdigit('4'));
+
   printf("-----------------\n\n");
 }
 
@@ -92,10 +95,63 @@ void check_alnum (void)
   printf("should be alnum %d\n", ft_isalnum('0'));
   printf("should be alnum %d\n", ft_isalnum('9'));
   printf("should be alnum %d\n", ft_isalnum('4'));
+
   printf("should not be alnum %d\n", ft_isalnum('.'));
   printf("should not be alnum %d\n", ft_isalnum('`'));
+  printf("should not be alnum %d\n", ft_isalnum('!'));
+  printf("should not be alnum %d\n", ft_isalnum('#'));
+
   printf("-----------------\n\n");
 }
+
+void check_ascii (void)
+{
+  printf("----- ASCII -----\n");
+
+  printf("should be ascii %d\n", ft_isascii('A'));
+  printf("should be ascii %d\n", ft_isascii('Z'));
+  printf("should be ascii %d\n", ft_isascii('B'));
+  printf("should be ascii %d\n", ft_isascii('a'));
+  printf("should be ascii %d\n", ft_isascii('z'));
+  printf("should be ascii %d\n", ft_isascii('b'));
+  printf("should be ascii %d\n", ft_isascii('0'));
+  printf("should be ascii %d\n", ft_isascii('9'));
+  printf("should be ascii %d\n", ft_isascii('4'));
+  printf("should be ascii %d\n", ft_isascii('.'));
+  printf("should be ascii %d\n", ft_isascii('`'));
+
+  printf("should not be ascii %d\n", ft_isascii(-42));
+  printf("should not be ascii %d\n", ft_isascii(142));
+  printf("should not be ascii %d\n", ft_isascii(1022));
+
+  printf("-----------------\n\n");
+}
+
+void check_print (void)
+{
+    printf("----- PRINT -----\n");
+
+    printf("should be print %d\n", ft_isprint('A'));
+    printf("should be print %d\n", ft_isprint('Z'));
+    printf("should be print %d\n", ft_isprint('B'));
+    printf("should be print %d\n", ft_isprint('a'));
+    printf("should be print %d\n", ft_isprint('z'));
+    printf("should be print %d\n", ft_isprint('b'));
+    printf("should be print %d\n", ft_isprint('0'));
+    printf("should be print %d\n", ft_isprint('9'));
+    printf("should be print %d\n", ft_isprint('4'));
+    printf("should be print %d\n", ft_isprint('.'));
+    printf("should be print %d\n", ft_isprint('`'));
+
+    printf("should not be print %d\n", ft_isprint(31));
+    printf("should not be print %d\n", ft_isprint(-42));
+    printf("should not be print %d\n", ft_isprint(142));
+    printf("should not be print %d\n", ft_isprint(1022));
+
+    printf("-----------------\n\n");
+}
+
+
 
 int main (void)
 {
@@ -104,6 +160,8 @@ int main (void)
   check_alpha();
   check_digit();
   check_alnum();
+  check_ascii();
+  check_print();
 
   return 0;
 }

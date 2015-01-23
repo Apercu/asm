@@ -15,18 +15,27 @@
 ;                                                                              ;
 ; ============================================================================ ;
 
+extern _ft_isdigit
+extern _ft_isalpha
 
 global _ft_isalnum
-
-global _ft_isdigit
 
 section .text
 
 _ft_isalnum:
 
   xor rax, rax
+  mov rcx, rdi
 
   call _ft_isdigit
+  cmp rax, 1
+  je out
+
+  call _ft_isalpha
+  cmp rax, 1
+  je out
+
+  mov rax, 0
 
 out:
   ret

@@ -21,6 +21,8 @@
 
 void check_bzero (void)
 {
+  printf("----- BZERO -----\n");
+
   char str[4] = "aaa\0";
 
   printf("str before bzero: %s\n", str);
@@ -28,22 +30,26 @@ void check_bzero (void)
   printf("str after  bzero: %s\n", str);
 
   //ft_bzero(NULL, 31);
-  printf("-----------------\n");
+  printf("-----------------\n\n");
 }
 
 void check_strlen (void)
 {
+  printf("----- STRLEN ----\n");
+
   char str[4] = "aaa\0";
 
   printf("should be 3 = %d\n", (int)ft_strlen(str));
   ft_bzero(&str, 4);
   printf("should be 0 = %d\n", (int)ft_strlen(str));
   //printf("should be 0 = %d\n", (int)ft_strlen(NULL));
-  printf("-----------------\n");
+  printf("-----------------\n\n");
 }
 
 void check_alpha (void)
 {
+  printf("----- ALPHA -----\n");
+
   printf("should be alpha %d\n", ft_isalpha('A'));
   printf("should be alpha %d\n", ft_isalpha('Z'));
   printf("should be alpha %d\n", ft_isalpha('B'));
@@ -52,11 +58,13 @@ void check_alpha (void)
   printf("should be alpha %d\n", ft_isalpha('b'));
   printf("should not be alpha %d\n", ft_isalpha('.'));
   printf("should not be alpha %d\n", ft_isalpha('0'));
-  printf("-----------------\n");
+  printf("-----------------\n\n");
 }
 
 void check_digit (void)
 {
+  printf("----- DIGIT -----\n");
+
   printf("should not be digit %d\n", ft_isdigit('A'));
   printf("should not be digit %d\n", ft_isdigit('Z'));
   printf("should not be digit %d\n", ft_isdigit('B'));
@@ -68,7 +76,25 @@ void check_digit (void)
   printf("should be digit %d\n", ft_isdigit('0'));
   printf("should be digit %d\n", ft_isdigit('9'));
   printf("should be digit %d\n", ft_isdigit('4'));
-  printf("-----------------\n");
+  printf("-----------------\n\n");
+}
+
+void check_alnum (void)
+{
+  printf("----- ALNUM -----\n");
+
+  printf("should be alnum %d\n", ft_isalnum('A'));
+  printf("should be alnum %d\n", ft_isalnum('Z'));
+  printf("should be alnum %d\n", ft_isalnum('B'));
+  printf("should be alnum %d\n", ft_isalnum('a'));
+  printf("should be alnum %d\n", ft_isalnum('z'));
+  printf("should be alnum %d\n", ft_isalnum('b'));
+  printf("should be alnum %d\n", ft_isalnum('0'));
+  printf("should be alnum %d\n", ft_isalnum('9'));
+  printf("should be alnum %d\n", ft_isalnum('4'));
+  printf("should not be alnum %d\n", ft_isalnum('.'));
+  printf("should not be alnum %d\n", ft_isalnum('`'));
+  printf("-----------------\n\n");
 }
 
 int main (void)
@@ -77,6 +103,7 @@ int main (void)
   check_strlen();
   check_alpha();
   check_digit();
+  check_alnum();
 
   return 0;
 }

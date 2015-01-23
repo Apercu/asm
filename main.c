@@ -153,7 +153,7 @@ void check_print (void)
 
 void check_toupper (void)
 {
-    printf("----- PRINT -----\n");
+    printf("----- TOUPPER -----\n");
 
     printf("should be uppered %c\n", ft_toupper('a'));
     printf("should be uppered %c\n", ft_toupper('z'));
@@ -171,6 +171,26 @@ void check_toupper (void)
     printf("-----------------\n\n");
 }
 
+void check_tolower (void)
+{
+    printf("----- TOLOWER -----\n");
+
+    printf("should stay as is %c\n", ft_tolower('a'));
+    printf("should stay as is %c\n", ft_tolower('z'));
+    printf("should stay as is %c\n", ft_tolower('b'));
+    printf("should stay as is %c\n", ft_tolower('0'));
+    printf("should stay as is %c\n", ft_tolower('9'));
+    printf("should stay as is %c\n", ft_tolower('4'));
+    printf("should stay as is %c\n", ft_tolower('.'));
+    printf("should stay as is %c\n", ft_tolower('`'));
+
+    printf("should be lowered %c\n", ft_tolower('A'));
+    printf("should be lowered %c\n", ft_tolower('Z'));
+    printf("should be lowered %c\n", ft_tolower('B'));
+
+    printf("-----------------\n\n");
+}
+
 
 int main (void)
 {
@@ -182,6 +202,7 @@ int main (void)
   check_ascii();
   check_print();
   check_toupper();
+  check_tolower();
 
   return 0;
 }

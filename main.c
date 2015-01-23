@@ -195,10 +195,22 @@ void check_puts (void)
 {
     printf("----- PUTS ------\n");
 
-    ft_puts("LOLO \n");
+    int ret = ft_puts("LOLO |");
+    printf("ret %d\n", ret);
     ft_puts("91005\n");
     ft_puts("withoutbackslashn");
-    ft_puts("\n");
+    ft_puts("ss\n");
+
+    printf("-----------------\n\n");
+}
+
+void check_strcat (void)
+{
+    printf("----- STRCAT ------\n");
+
+    char one[5] = "This ";
+    char two[11] = " with this.";
+    printf("should be concatenated %s\n", ft_strcat(one, two));
 
     printf("-----------------\n\n");
 }
@@ -217,6 +229,7 @@ int main (void)
   check_toupper();
   check_tolower();
   check_puts();
+//  check_strcat();
 
   return 0;
 }

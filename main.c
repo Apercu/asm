@@ -191,9 +191,22 @@ void check_tolower (void)
     printf("-----------------\n\n");
 }
 
+void check_puts (void)
+{
+    printf("----- PUTS ------\n");
+
+    ft_puts("LOLO \n");
+    ft_puts("91005\n");
+    ft_puts("withoutbackslashn");
+    ft_puts("\n");
+
+    printf("-----------------\n\n");
+}
+
 
 int main (void)
 {
+
   check_bzero();
   check_strlen();
   check_alpha();
@@ -203,6 +216,7 @@ int main (void)
   check_print();
   check_toupper();
   check_tolower();
+  check_puts();
 
   return 0;
 }

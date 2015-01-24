@@ -232,6 +232,20 @@ void check_memset (void)
 	printf("-----------------\n\n");
 }
 
+void check_memcpy (void)
+{
+	printf("----- MEMCPY ------\n");
+
+	char one[6] = "Hello\0";
+	char two[6] = "PUTES\0";
+
+	ft_memcpy(one, two, 2);
+	printf("one after memcpy: [%s]\n", one);
+	printf("ret after memcpy: [%s]\n", (char *)ft_memcpy(one, two, 2));
+
+	printf("-----------------\n\n");
+}
+
 int main (void)
 {
 	/* Classic shit */
@@ -253,6 +267,7 @@ int main (void)
 	/* Memory */
 	check_bzero();
 	check_memset();
+	check_memcpy();
 
 	return 0;
 }

@@ -29,9 +29,12 @@ int     ft_toupper(int c);
 int     ft_tolower(int c);
 
 int     ft_puts (const char * str);
-void    ft_bzero (void * pt, size_t n);
 
 size_t  ft_strlen(const char * s);
 char *  ft_strcat(char * s1, const char * s2);
+
+void    ft_bzero (void * pt, size_t n);
+void *	ft_memset(void * b, int c, size_t len);
+
 
 #endif

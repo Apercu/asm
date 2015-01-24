@@ -3,7 +3,7 @@
 ;     ██╗  ██╗██████╗                                                          ;
 ;     ██║  ██║╚════██╗                                                         ;
 ;     ███████║ █████╔╝              created by: bgronon                        ;
-;     ╚════██║██╔═══╝                       at: 2015-01-23 11:53:42            ;
+;     ╚════██║██╔═══╝                       at: 2015-01-22 10:00:02            ;
 ;          ██║███████╗                                                         ;
 ;          ╚═╝╚══════╝                                                         ;
 ;     ███████╗ █████╗ ██╗   ██╗ █████╗ ████████╗████████╗ █████╗ ███████╗      ;
@@ -15,38 +15,21 @@
 ;                                                                              ;
 ; ============================================================================ ;
 
-extern _ft_strlen
-
-global _ft_strcat
+global _ft_memset
 
 section .text
 
-_ft_strcat:
+_ft_memset:
 
-  mov rcx, rdi
+	push rdi
 
-  call _ft_strlen
+	cld
+	mov al, sil
+	mov rcx, rdx
 
-  mov rcx, rax
-  xor rax, rax
+	rep stosb
 
-while:
-  cmp byte [rsi + rax], 0
-  je out
+	pop rdi
+	mov rax, rdi
 
-  mov dl, byte [rsi + rax]
-
-  add rax, rcx
-
-  mov byte [rdi + rax], dl
-
-  sub rax, rcx
-
-  inc rax
-  jmp while
-
-out:
-  add rax, rcx
-  mov byte [rdi + rax], 0
-  mov rax, rdi
   ret

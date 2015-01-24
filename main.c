@@ -208,12 +208,12 @@ void check_strcat (void)
 {
     printf("----- STRCAT ------\n");
 
+    char one[5] = "This\0";
     char two[12] = " with this.\0";
-    char one[6] = "This \0";
 
-    ft_strcat(two, one);
-    printf("test %s\n", ft_strcat(two, one));
-    //printf("should be concatenated %s\n", ft_strcat(two, one));
+    printf("ret: [%s]\n", ft_strcat(one, two));
+    printf("one: [%s]\n", one);
+    printf("two: [%s]\n", two);
 
     printf("-----------------\n\n");
 }

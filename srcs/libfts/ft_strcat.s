@@ -27,25 +27,26 @@ _ft_strcat:
 
   call _ft_strlen
 
-  mov rcx, rax ; lenght of s1
-  xor rax, rax ; cpt
+  mov rcx, rax
+  xor rax, rax
 
 while:
-  cmp byte [rdi + rax], 0
+  cmp byte [rsi + rax], 0
   je out
 
-;  mov al, byte [rsi + rax]
-;  add rax, rcx
+  mov bl, byte [rsi + rax]
 
-  mov byte [rdi + rax], 'a'
+  add rax, rcx
 
-;  sub rax, rcx
+  mov byte [rdi + rax], bl
 
+  sub rax, rcx
 
   inc rax
   jmp while
 
 out:
-  ;add rax, [rcx]
-  ;mov byte [rdi + rax], 0
+  add rax, rcx
+  mov byte [rdi + rax], 0
+  mov rax, rdi
   ret

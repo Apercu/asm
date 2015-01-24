@@ -246,6 +246,21 @@ void check_memcpy (void)
 	printf("-----------------\n\n");
 }
 
+void check_strdup (void)
+{
+	printf("----- MEMCPY ------\n");
+
+	char str[5] = "Test\0";
+
+	printf("str [%s] ptr [%p]\n", str, str);
+
+	char * cpy = ft_strdup(str);
+
+	printf("cpy [%s] ptr [%p]\n", cpy, cpy);
+
+	printf("-----------------\n\n");
+}
+
 int main (void)
 {
 	/* Classic shit */
@@ -268,6 +283,7 @@ int main (void)
 	check_bzero();
 	check_memset();
 	check_memcpy();
+	check_strdup();
 
 	return 0;
 }

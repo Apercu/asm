@@ -3,7 +3,7 @@
 ;     ██╗  ██╗██████╗                                                          ;
 ;     ██║  ██║╚════██╗                                                         ;
 ;     ███████║ █████╔╝              created by: bgronon                        ;
-;     ╚════██║██╔═══╝                       at: 2015-01-23 11:00:02            ;
+;     ╚════██║██╔═══╝                       at: 2015-01-26 12:43:02            ;
 ;          ██║███████╗                                                         ;
 ;          ╚═╝╚══════╝                                                         ;
 ;     ███████╗ █████╗ ██╗   ██╗ █████╗ ████████╗████████╗ █████╗ ███████╗      ;
@@ -15,54 +15,72 @@
 ;                                                                              ;
 ; ============================================================================ ;
 
-extern _malloc
-extern _ft_strlen
-extern _ft_memcpy
+extern _ft_puts
+extern _ft_bzero
 
-global _ft_strdup
+global _ft_cat
+
+section .data
+
+buffer times 3 db 0
+bufflen equ $ - buffer
 
 section .text
 
-_ft_strdup:
+_ft_cat:
 
-	push rbp
-	mov rbp, rsp
+while:
 
 	push rdi
 
-	mov rcx, rdi
-	call _ft_strlen
+	mov rdi, buffer
+	mov rsi, bufflen
+	call _ft_bzero
+	mov rsi, rax
 
-	mov r9, rax
-	push r9
+	pop rdi
 
-	inc rax
+	mov rax, 0x2000003
+	mov rsi, buffer
+	mov rdx, bufflen
+	syscall
 
-	mov rcx, rax
+	cmp rax, -1
+	je error
 
-	mov rax, 8
-	mov dl, cl
-	mul al
+	push rdi
 
-	xor rdi, rdi
-	mov dil, al
-
-	call _malloc
 	cmp rax, 0
 	je out
 
-	pop r9
+	mov rax, 0x2000004
+	mov rdi, 1
+	mov rsi, buffer
+	mov rdx, bufflen
+	syscall
+
 	pop rdi
 
-	mov rsi, rdi
-	mov rdi, rax
-	mov rdx, r9
+	cmp rax, -1
+	je error
 
-	call _ft_memcpy
-
-	mov rsp, rbp
-	pop rbp
+	jmp while
 
 out:
+
+	pop rdi
+
 	ret
 
+error:
+
+	jmp out
+
+last:
+
+	mov rax, 0x2000004
+	mov rdi, 1
+	mov rsi, buffer
+	mov rdx, bufflen
+	syscall
+	jmp out

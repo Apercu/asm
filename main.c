@@ -16,8 +16,9 @@
 /* ========================================================================== */
 
 #include <stdio.h>
+#include <fcntl.h>
 #include "libftasm.h"
-
+#include <unistd.h>
 
 void check_bzero (void)
 {
@@ -237,18 +238,21 @@ void check_memcpy (void)
 	printf("----- MEMCPY ------\n");
 
 	char one[6] = "Hello\0";
-	char two[6] = "PUTES\0";
+	char two[6] = "CHATS\0";
 
-	ft_memcpy(one, two, 2);
-	printf("one after memcpy: [%s]\n", one);
-	printf("ret after memcpy: [%s]\n", (char *)ft_memcpy(one, two, 2));
+	printf("%p\n", one);
+	printf("%p\n", two);
+	char * res = ft_memcpy(one, two, 2);
+	printf("one after memcpy: [%s] (%p)\n", one, one);
+	printf("two after memcpy: [%s] (%p)\n", two, two);
+	printf("ret after memcpy: [%s] (%p)\n", res, res);
 
 	printf("-----------------\n\n");
 }
 
 void check_strdup (void)
 {
-	printf("----- MEMCPY ------\n");
+	printf("----- STRDUP ------\n");
 
 	char str[5] = "Test\0";
 
@@ -258,6 +262,18 @@ void check_strdup (void)
 
 	printf("cpy [%s] ptr [%p]\n", cpy, cpy);
 
+	printf("-----------------\n\n");
+}
+
+void check_cat (void)
+{
+	printf("----- CAT ------\n");
+
+	int fd = open("testfile", O_RDONLY);
+
+	ft_cat(fd);
+
+	close(fd);
 	printf("-----------------\n\n");
 }
 
@@ -284,6 +300,8 @@ int main (void)
 	check_memset();
 	check_memcpy();
 	check_strdup();
+
+	check_cat();
 
 	return 0;
 }

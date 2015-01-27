@@ -31,6 +31,7 @@ NASM_FILES = ft_puts.s \
 						 ft_toupper.s \
 						 ft_tolower.s \
 						 ft_strcat.s \
+						 ft_strncat.s \
 						 ft_memset.s \
 						 ft_memcpy.s \
 						 ft_strdup.s \

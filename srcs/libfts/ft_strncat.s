@@ -3,7 +3,7 @@
 ;     ██╗  ██╗██████╗                                                          ;
 ;     ██║  ██║╚════██╗                                                         ;
 ;     ███████║ █████╔╝              created by: bgronon                        ;
-;     ╚════██║██╔═══╝                       at: 2015-01-26 12:43:02            ;
+;     ╚════██║██╔═══╝                       at: 2015-01-23 11:53:42            ;
 ;          ██║███████╗                                                         ;
 ;          ╚═╝╚══════╝                                                         ;
 ;     ███████╗ █████╗ ██╗   ██╗ █████╗ ████████╗████████╗ █████╗ ███████╗      ;
@@ -15,63 +15,41 @@
 ;                                                                              ;
 ; ============================================================================ ;
 
-extern _ft_puts
-extern _ft_bzero
+extern _ft_strlen
 
-global _ft_cat
-
-section .data
-
-buffer times 302 db 0
-bufflen equ $ - buffer
+global _ft_strncat
 
 section .text
 
-_ft_cat:
+_ft_strncat:
+
+  mov rcx, rdi
+
+  call _ft_strlen
+
+  mov rcx, rax
+  xor rax, rax
 
 while:
+  cmp byte [rsi + rax], 0
+  je out
 
-	mov rax, 0x2000003
-	mov rsi, buffer
-	mov rdx, bufflen
-	syscall
-
-	cmp rax, -1
-	je error
-
-	push rdi
-
-	cmp rax, 0
+	cmp rdx, rax
 	je out
 
-	mov rdx, rax
-	mov rax, 0x2000004
-	mov rdi, 1
-	mov rsi, buffer
-	syscall
+  mov r9b, byte [rsi + rax]
 
-	pop rdi
+  add rax, rcx
 
-	cmp rax, -1
-	je error
+  mov byte [rdi + rax], r9b
 
-	jmp while
+  sub rax, rcx
+
+  inc rax
+  jmp while
 
 out:
-
-	pop rdi
-
-	ret
-
-error:
-
-	jmp out
-
-last:
-
-	mov rax, 0x2000004
-	mov rdi, 1
-	mov rsi, buffer
-	mov rdx, bufflen
-	syscall
-	jmp out
+  add rax, rcx
+  mov byte [rdi + rax], 0
+  mov rax, rdi
+  ret

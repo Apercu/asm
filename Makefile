@@ -35,6 +35,7 @@ NASM_FILES = ft_puts.s \
 						 ft_memset.s \
 						 ft_memcpy.s \
 						 ft_strdup.s \
+						 ft_strcmp.s \
 						 ft_cat.s \
 
 DIR_SRC    = srcs/libfts

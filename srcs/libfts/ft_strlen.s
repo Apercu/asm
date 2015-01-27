@@ -21,13 +21,18 @@ section .text
 
 _ft_strlen:
 
-  xor rax, rax
+	cld
 
-looping:
-  cmp byte [rdi + rax], 0
-  je out
-  inc rax
-  jmp looping
+	xor rcx, rcx
+	not rcx
+
+	mov al, 0
+
+	repne scasb
+
+	mov rax, rcx
+	not rax
+	dec rax
 
 out:
   ret

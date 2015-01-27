@@ -15,14 +15,13 @@
 ;                                                                              ;
 ; ============================================================================ ;
 
-extern _ft_puts
 extern _ft_bzero
 
 global _ft_cat
 
 section .data
 
-buffer times 302 db 0
+buffer times 2048 db 0
 bufflen equ $ - buffer
 
 section .text
@@ -35,9 +34,7 @@ while:
 	mov rsi, buffer
 	mov rdx, bufflen
 	syscall
-
-	cmp rax, -1
-	je error
+	jc err
 
 	push rdi
 
@@ -52,26 +49,15 @@ while:
 
 	pop rdi
 
-	cmp rax, -1
-	je error
+	jc err
 
 	jmp while
 
 out:
-
 	pop rdi
-
+	mov rax, 0
 	ret
 
-error:
-
-	jmp out
-
-last:
-
-	mov rax, 0x2000004
-	mov rdi, 1
-	mov rsi, buffer
-	mov rdx, bufflen
-	syscall
-	jmp out
+err:
+	mov rax, 1
+	ret

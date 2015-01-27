@@ -1,1634 +1,305 @@
-/* ************************************************************************** */
+/* ========================================================================== */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: student@42 <@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2013/11/22 14:43:06 by student@42        #+#    #+#             */
-/*   Updated: 2015/01/27 12:33:47 by bgronon          ###   ########.fr       */
+/*    ██╗  ██╗██████╗                                                         */
+/*    ██║  ██║╚════██╗                                                        */
+/*    ███████║ █████╔╝              created by: bgronon                       */
+/*    ╚════██║██╔═══╝                       at: 2015-01-12 10:58:02           */
+/*         ██║███████╗                                                        */
+/*         ╚═╝╚══════╝                                                        */
+/*    ███████╗ █████╗ ██╗   ██╗ █████╗ ████████╗████████╗ █████╗ ███████╗     */
+/*    ╚══███╔╝██╔══██╗██║   ██║██╔══██╗╚══██╔══╝╚══██╔══╝██╔══██╗██╔════╝     */
+/*      ███╔╝ ███████║██║   ██║███████║   ██║      ██║   ███████║███████╗     */
+/*     ███╔╝  ██╔══██║╚██╗ ██╔╝██╔══██║   ██║      ██║   ██╔══██║╚════██║     */
+/*    ███████╗██║  ██║ ╚████╔╝ ██║  ██║   ██║      ██║   ██║  ██║███████║     */
+/*    ╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝╚══════╝     */
 /*                                                                            */
-/* ************************************************************************** */
+/* ========================================================================== */
 
-/*
- *
- *	Salut la nouvelle promo merci de lire README.md et bon courage tout le monde
- *
- *	https://github.com/QuentinPerez
- *	https://github.com/mfontain
- *	https://github.com/alex8092
- *	https://github.com/gabtoubl
- *	https://github.com/soyel
- *	https://github.com/stherman
- *	https://github.com/jplot
- *
- */
-
-/*
-** author : qperez
-** HardCore + strtrim + Fixes: mfontain
-** Fixes strsplit, strequ: gabtoubl
-** Fixes strsplit, strjoin, strsub, strtrim, itoa, strequ, strnequ: stherman
-** Crash handle : ele-goug
-** Detailed error messages : jpucelle
-**
-** Any segfault ? Probably caused by a NULL test. ex : ft_memset(NULL, 0, 0);
-*/
-
-#include <string.h>
 #include <stdio.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <time.h>
-#include <unistd.h>
-#include <signal.h>
+#include "libftasm.h"
 
-#include <libftasm.h> /* compile with -I./ */
-
-#define D_ERROR	{ printf("Error Line %d, Funct %s ", __LINE__ - 1, __func__); return (0); }
-#define D_ADD_HCTEST(name)	uf_add_test(test, "\033[33m"#name"\033[0m", uf_test_##name);
-#define D_ADD_TEST(name)	uf_add_test(test, #name, uf_test_##name);
-#define D_TEST	60
-#define RANDT	512
-#define LONG	10000
-
-int	uf_test_tolower(void);
-int	uf_test_toupper(void);
-int	uf_test_isprint(void);
-int	uf_test_isascii(void);
-int	uf_test_isalnum(void);
-int	uf_test_isdigit(void);
-int	uf_test_isalpha(void);
-
-int	uf_test_strcat(void);
-int	uf_test_strncat(void);
-int	uf_test_strdup(void);
-int	uf_test_strlen(void);
-
-int	uf_test_memcpy(void);
-int	uf_test_memset(void);
-int	uf_test_bzero(void);
-
-typedef struct	s_test
+void check_bzero (void)
 {
-	const char	*name;
-	int			(*funct)(void);
-	bool		set;
-}				t_test;
+	printf("----- BZERO -----\n");
 
-void				uf_add_test(t_test *test, const char *name, int (*funct)(void))
-{
-	static int		i = 0;
+	char str[4] = "aaa\0";
 
-	test[i].name = name;
-	test[i].funct = funct;
-	test[i].set = true;
-	test[i + 1].set = false;
-	i = i + 1;
+	printf("str before bzero: %s\n", str);
+	ft_bzero(&str, 4);
+	printf("str after  bzero: %s\n", str);
+
+	//ft_bzero(NULL, 31);
+	printf("-----------------\n\n");
 }
 
-int					main(void)
+void check_strlen (void)
 {
-	int				i;
-	t_test			test[D_TEST];
-	int				status;
-	pid_t			pid;
+	printf("----- STRLEN ----\n");
 
-	srand(time(NULL));
-	printf("[\033[33mYellow Tests\033[0m] are Hardcore\n");
-	i = 0;
-	memset(test, 0, D_TEST);
-/*
- * Si vous n'avez pas la fonction il suffit de mettre en commentaire
- */
-/*
- * Example : vous n'avez pas memset vous commentez
- * // #define D_MEMSET
- * // D_ADD_TEST(...)
- */
+	char str[4] = "aaa\0";
 
-#define	D_MEMSET
-	D_ADD_HCTEST(memset);
-#define	D_BZERO
-	D_ADD_HCTEST(bzero);
-#define	D_MEMCPY
-	D_ADD_HCTEST(memcpy);
-#define	D_STRLEN
-	D_ADD_TEST(strlen);
-#define	D_STRDUP
-	D_ADD_TEST(strdup);
-#define	D_STRCAT
-	D_ADD_TEST(strcat);
-#define	D_STRNCAT
-	D_ADD_TEST(strncat);
-#define	D_ISALPHA
-	D_ADD_HCTEST(isalpha);
-#define	D_ISDIGIT
-	D_ADD_HCTEST(isdigit);
-#define	D_ISALNUM
-	D_ADD_HCTEST(isalnum);
-#define	D_ISASCII
-	D_ADD_HCTEST(isascii);
-#define	D_ISPRINT
-	D_ADD_HCTEST(isprint);
-#define	D_TOUPPER
-	D_ADD_HCTEST(toupper);
-#define	D_TOLOWER
-	D_ADD_HCTEST(tolower);
-	while (test[i].set == true)
-	{
-		printf("Test [%s] : ", test[i].name);
-		fflush(stdout);
-		if ((pid = fork()) == 0)
-		{
-			if (test[i].funct() == 0)
-				printf("\033[31mFAIL\033[0m\n");
-			else
-				printf("\033[32mOK\033[0m\n");
-			exit(0);
-		}
-		if (pid == -1)
-			printf("\033[33mUNABLE TO FORK\033[0m\n");
-		else
-		{
-			if (waitpid(pid, &status, 0) != -1)
-			{
-				if (WIFSIGNALED(status))
-				{
-					if (WTERMSIG(status) == SIGSEGV)
-						printf("\033[33mSegmentation Fault\033[0m\n");
-					else if (WTERMSIG(status) == SIGEMT)
-						printf("\033[33mBus Error\033[0m\n");
-					else if (WTERMSIG(status) == SIGILL)
-						printf("\033[33mIllegal Instruction\033[0m\n");
-					else
-						printf("\033[33mThe processus receive the signal %d\033[0m\n", WTERMSIG(status));
-				}
-			}
-			else
-				perror("Waitpid");
-		}
-		i = i + 1;
-	}
-	return (0);
+	printf("should be 3 = %d\n", (int)ft_strlen(str));
+	ft_bzero(&str, 4);
+	printf("should be 0 = %d\n", (int)ft_strlen(str));
+	//printf("should be 0 = %d\n", (int)ft_strlen(NULL));
+
+	printf("-----------------\n\n");
 }
 
-void	uf_del_callback(void *d, size_t s)
+void check_alpha (void)
 {
-	free(d);
-	(void)s;
+	printf("----- ALPHA -----\n");
+
+	printf("should be alpha %d\n", ft_isalpha('A'));
+	printf("should be alpha %d\n", ft_isalpha('Z'));
+	printf("should be alpha %d\n", ft_isalpha('B'));
+	printf("should be alpha %d\n", ft_isalpha('a'));
+	printf("should be alpha %d\n", ft_isalpha('z'));
+	printf("should be alpha %d\n", ft_isalpha('b'));
+	printf("should not be alpha %d\n", ft_isalpha('.'));
+	printf("should not be alpha %d\n", ft_isalpha('0'));
+
+	printf("-----------------\n\n");
 }
 
-
-int					uf_free_tab(void **tab)
+void check_digit (void)
 {
-	unsigned int	i;
+	printf("----- DIGIT -----\n");
 
-	if (tab == NULL)
-		return (0);
-	i = 0;
-	while (tab[i] != NULL)
-	{
-		free(tab[i]);
-		i = i + 1;
-	}
-	free(tab);
-	return (1);
+	printf("should not be digit %d\n", ft_isdigit('A'));
+	printf("should not be digit %d\n", ft_isdigit('Z'));
+	printf("should not be digit %d\n", ft_isdigit('B'));
+	printf("should not be digit %d\n", ft_isdigit('a'));
+	printf("should not be digit %d\n", ft_isdigit('z'));
+	printf("should not be digit %d\n", ft_isdigit('b'));
+	printf("should not be digit %d\n", ft_isdigit('.'));
+	printf("should not be digit %d\n", ft_isdigit('`'));
+	printf("should be digit %d\n", ft_isdigit('0'));
+	printf("should be digit %d\n", ft_isdigit('9'));
+	printf("should be digit %d\n", ft_isdigit('4'));
+
+	printf("-----------------\n\n");
 }
 
-#ifdef	D_STRTRIM
-int					uf_test_strtrim(void)
+void check_alnum (void)
 {
-	char			str[] = "  \t    \t\nBon\t \njour\t\n  \n     ";
-	char			str2[] = "Bonjour";
-	char			str3[] = "  \t\t\t   ";
-	char			*r;
+	printf("----- ALNUM -----\n");
 
-	ft_strtrim(NULL);
-	r = ft_strtrim(str);
-	if (strcmp(r, "Bon\t \njour"))
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strstrim(\"  \t    \t\nBon\t \njour\t\n  \n     \").\nExpected ret = \"Bon\t \njour\" \
-			   but have ret = \"%s\"\033[0m\n", __LINE__ - 2, __func__, r);
-		free(r);
-		return (0);
-	}
-	free(r);
-	r = ft_strtrim(str2);
-    if (strcmp(r, "Bonjour") || (str2 == r))
-    {
-        printf("Error Line %d, Funct %s : \n\033[31mft_strstrim(\"Bonjour\").\nExpected ret = \"Bonjour\" and differents pointers\
-			   but have ret = \"%s\" and our: %p / your: %p\033[0m\n", __LINE__ - 2, __func__, r, str2, r);
-		free(r);
-        return (0);
-    }
-    free(r);
-	r = ft_strtrim(str3);
-    if (strcmp(r, "") || (str3 == r))
-    {
-        printf("Error Line %d, Funct %s : \n\033[31mft_strstrim(\"  \t\t\t  \").\nExpected ret = \"\" and different\
-s pointers but have ret = \"%s\" and our: %p / your: %p\033[0m\n", __LINE__ - 2, __func__, r, str3, r);
-		free(r);
-        return (0);
-    }
-    free(r);
-	return (1);
-}
-#endif
+	printf("should be alnum %d\n", ft_isalnum('A'));
+	printf("should be alnum %d\n", ft_isalnum('Z'));
+	printf("should be alnum %d\n", ft_isalnum('B'));
+	printf("should be alnum %d\n", ft_isalnum('a'));
+	printf("should be alnum %d\n", ft_isalnum('z'));
+	printf("should be alnum %d\n", ft_isalnum('b'));
+	printf("should be alnum %d\n", ft_isalnum('0'));
+	printf("should be alnum %d\n", ft_isalnum('9'));
+	printf("should be alnum %d\n", ft_isalnum('4'));
 
-#ifdef	D_STRSPLIT
-int					uf_test_strsplit(void)
-{
-	char			**ret;
+	printf("should not be alnum %d\n", ft_isalnum('.'));
+	printf("should not be alnum %d\n", ft_isalnum('`'));
+	printf("should not be alnum %d\n", ft_isalnum('!'));
+	printf("should not be alnum %d\n", ft_isalnum('#'));
 
-	ft_strsplit(NULL, 0);
-	ft_strsplit(NULL, 'a');
-	ret = ft_strsplit("", '*');
-	if (ret == NULL || ret[0] != NULL)
-	{
-		printf("Error Line %d, Funct %s : \
-			   \nYour function has return NULL or the first pointer in your tab is NULL\n", __LINE__ - 2, __func__);
-		uf_free_tab((void **)ret);
-		return (0);
-	}
-	uf_free_tab((void **)ret);
-	ret = ft_strsplit("*********", '*');
-	if (ret == NULL || ret[0] != NULL)
-	{
-		printf("Error Line %d, Funct %s : \
-			   \nYour function has return NULL or the first pointer in your tab is NULL\n", __LINE__ - 2, __func__);
-		uf_free_tab((void **)ret);
-		return (0);
-	}
-	if (uf_free_tab((void **)ret) == 0)
-	{
-		printf("Error Line %d, Funct %s : \nUnable to free your tab in first test\n", __LINE__ - 2, __func__);
-		return (0);
-	}
-	ret = ft_strsplit("hello", '*');
-	if (ret[1] != NULL && strcmp(ret[0], "hello") != 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strsplit(\"hello\", '*').\nExpected tab[0] = \"hello\" and tab[1] = NULL \
-			   but have tab[0] = \"%s\" and tab[1] = \"%s\"\033[0m\n", __LINE__ - 2, __func__, ret[0], ret[1]);
-		uf_free_tab((void **)ret);
-		return (0);
-	}
-	if (uf_free_tab((void **)ret) == 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mUnable to free your tab in second test\033[0m\n", __LINE__ - 2, __func__);
-		return (0);
-	}
-	ret = ft_strsplit("*hello", '*');
-	if (ret[1] != NULL && strcmp(ret[0], "hello") != 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strsplit(\"*hello\", '*').\nExpected tab[0] = \"hello\" and tab[1] = NULL \
-			   but have tab[0] = \"%s\" and tab[1] = \"%s\"\033[0m\n", __LINE__ - 2, __func__, ret[0], ret[1]);
-		uf_free_tab((void **)ret);
-		return (0);
-	}
-	if (uf_free_tab((void **)ret) == 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mUnable to free your tab in third test\033[0m\n", __LINE__ - 2, __func__);
-		return (0);
-	}
-	ret = ft_strsplit("*hello*", '*');
-	if (ret[1] != NULL && strcmp(ret[0], "hello") != 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strsplit(\"*hello*\", '*').\nExpected tab[0] = \"hello\" and tab[1] = NULL \
-			   but have tab[0] = \"%s\" and tab[1] = \"%s\"\033[0m\n", __LINE__ - 2, __func__, ret[0], ret[1]);
-		uf_free_tab((void **)ret);
-		return (0);
-	}
-	if (uf_free_tab((void **)ret) == 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mUnable to free your tab in third test\033[0m\n", __LINE__ - 2, __func__);
-		return (0);
-	}
-	ret = ft_strsplit("*hel*lo*", '*');
-	if (ret[2] != NULL && strcmp(ret[0], "hel") != 0 && strcmp(ret[1], "lo") != 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strsplit(\"*hel*lo*\", '*').\nExpected tab[0] = \"hel\", tab[1] = \"lo\" and tab[2] = NULL \
-			   but have tab[0] = \"%s\", tab[1] = \"%s\" and tab[2] = \"%s\"\033[0m\n", __LINE__ - 2, __func__, ret[0], ret[1], ret[2]);
-		uf_free_tab((void **)ret);
-		return (0);
-	}
-	if (uf_free_tab((void **)ret) == 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mUnable to free your tab in fourth test\033[0m\n", __LINE__ - 2, __func__);
-		return (0);
-	}
-	ret = ft_strsplit("*hel*lo*f", '*');
-	if (ret[3] != NULL && strcmp(ret[0], "hel") != 0 && strcmp(ret[1], "lo") != 0 &&
-		strcmp(ret[2], "f") != 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strsplit(\"*hel*lo*f\", '*').\nExpected tab[0] = \"hel\", tab[1] = \"lo\", tab[2] = \"f\" and tab[3] = NULL \
-			   but have tab[0] = \"%s\", tab[1] = \"%s\", tab[2] = \"%s\" and tab[3] = \"%s\"\033[0m\n", __LINE__ - 2, __func__, ret[0], ret[1], ret[2], ret[3]);
-		uf_free_tab((void **)ret);
-		return (0);
-	}
-	if (uf_free_tab((void **)ret) == 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mUnable to free your tab in fifth test\033[0m\n", __LINE__ - 2, __func__);
-		return (0);
-	}
-	ret = ft_strsplit("g*hel*lo*f", '*');
-	if (ret[4] != NULL && strcmp(ret[0], "g") != 0 && strcmp(ret[1], "hel") != 0 &&
-		strcmp(ret[2], "lo") != 0 && strcmp(ret[3], "f") != 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strsplit(\"g*hel*lo*f\", '*').\nExpected tab[0] = \"g\", tab[1] = \"hel\", tab[2] = \"lo\", tab[3] = \"f\" and tab[4] = NULL \
-			   but have tab[0] = \"%s\", tab[1] = \"%s\", tab[2] = \"%s\", tab[3] = \"%s\" and tab[4] = \"%s\"\033[0m\n", __LINE__ - 2, __func__, ret[0], ret[1], ret[2], ret[3], ret[4]);
-		uf_free_tab((void **)ret);
-		return (0);
-	}
-	if (uf_free_tab((void **)ret) == 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mUnable to free your tab in sixth test\033[0m\n", __LINE__ - 2, __func__);
-		return (0);
-	}
-	ret = ft_strsplit("***hel****lo**", '*');
-	if (ret[2] != NULL && strcmp(ret[0], "hel") != 0 && strcmp(ret[1], "lo") != 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strsplit(\"*hel****lo*\", '*').\nExpected tab[0] = \"hel\", tab[1] = \"lo\" and tab[2] = NULL \
-			   but have tab[0] = \"%s\", tab[1] = \"%s\" and tab[2] = \"%s\"\033[0m\n", __LINE__ - 2, __func__, ret[0], ret[1], ret[2]);
-		uf_free_tab((void **)ret);
-		return (0);
-	}
-	if (uf_free_tab((void **)ret) == 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mUnable to free your tab in seventh test\033[0m\n", __LINE__ - 2, __func__);
-		return (0);
-	}
-	return (1);
-}
-#endif
-
-#ifdef	D_STRJOIN
-int				uf_test_strjoin(void)
-{
-	char		*ret;
-
-	ft_strjoin(NULL, NULL);
-	ft_strjoin(NULL, "");
-	ft_strjoin("", NULL);
-	ret = ft_strjoin("Hello ", "boys");
-	if (strcmp(ret, "Hello boys") != 0)
-	{
-		D_ERROR
-		free(ret);
-		return (0);
-	}
-	free(ret);
-	ret = ft_strjoin("", "boys");
-    if (strcmp(ret, "boys") != 0)
-    {
-		D_ERROR
-        free(ret);
-        return (0);
-    }
-    free(ret);
-	ret = ft_strjoin("Hello ", "");
-    if (strcmp(ret, "Hello ") != 0)
-    {
-		D_ERROR
-        free(ret);
-        return (0);
-    }
-    free(ret);
-	ret = ft_strjoin("", "");
-    if (strcmp(ret, "") != 0)
-    {
-		D_ERROR
-        free(ret);
-        return (0);
-    }
-    free(ret);
-	return (1);
-}
-#endif
-
-#ifdef	D_STRSUB
-int				uf_test_strsub(void)
-{
-	char		*ret;
-	char		str[] = "*Hello*";
-
-	ft_strsub(NULL, 0, 0);
-	ft_strsub(NULL, 1, 0);
-	ft_strsub(NULL, 1, 1);
-	ft_strsub(NULL, 0, 1);
-	ret = ft_strsub(str, 1, 5);
-	if (strcmp(ret, "Hello") != 0)
-	{
-		D_ERROR
-		return (0);
-	}
-	ret = ft_strsub(str, 3, 1);
-    if (strcmp(ret, "l") != 0)
-    {
-		D_ERROR
-        return (0);
-    }
-	return (1);
-}
-#endif
-
-void			uf_striteri_callback(unsigned int i, char *s)
-{
-	*s = *s + i;
+	printf("-----------------\n\n");
 }
 
-void			uf_striter_callback(char *s)
+void check_ascii (void)
 {
-	*s = *s + 1;
+	printf("----- ASCII -----\n");
+
+	printf("should be ascii %d\n", ft_isascii('A'));
+	printf("should be ascii %d\n", ft_isascii('Z'));
+	printf("should be ascii %d\n", ft_isascii('B'));
+	printf("should be ascii %d\n", ft_isascii('a'));
+	printf("should be ascii %d\n", ft_isascii('z'));
+	printf("should be ascii %d\n", ft_isascii('b'));
+	printf("should be ascii %d\n", ft_isascii('0'));
+	printf("should be ascii %d\n", ft_isascii('9'));
+	printf("should be ascii %d\n", ft_isascii('4'));
+	printf("should be ascii %d\n", ft_isascii('.'));
+	printf("should be ascii %d\n", ft_isascii('`'));
+
+	printf("should not be ascii %d\n", ft_isascii(-42));
+	printf("should not be ascii %d\n", ft_isascii(142));
+	printf("should not be ascii %d\n", ft_isascii(1022));
+
+	printf("-----------------\n\n");
 }
 
-char			uf_strmap_callback(char s)
+void check_print (void)
 {
-	return (s + 1);
+	printf("----- PRINT -----\n");
+
+	printf("should be print %d\n", ft_isprint('A'));
+	printf("should be print %d\n", ft_isprint('Z'));
+	printf("should be print %d\n", ft_isprint('B'));
+	printf("should be print %d\n", ft_isprint('a'));
+	printf("should be print %d\n", ft_isprint('z'));
+	printf("should be print %d\n", ft_isprint('b'));
+	printf("should be print %d\n", ft_isprint('0'));
+	printf("should be print %d\n", ft_isprint('9'));
+	printf("should be print %d\n", ft_isprint('4'));
+	printf("should be print %d\n", ft_isprint('.'));
+	printf("should be print %d\n", ft_isprint('`'));
+
+	printf("should not be print %d\n", ft_isprint(31));
+	printf("should not be print %d\n", ft_isprint(-42));
+	printf("should not be print %d\n", ft_isprint(142));
+	printf("should not be print %d\n", ft_isprint(1022));
+
+	printf("-----------------\n\n");
 }
 
-char			uf_strmapi_callback(unsigned int i, char s)
+void check_toupper (void)
 {
-	return (s + i);
+	printf("----- TOUPPER -----\n");
+
+	printf("should be uppered %c\n", ft_toupper('a'));
+	printf("should be uppered %c\n", ft_toupper('z'));
+	printf("should be uppered %c\n", ft_toupper('b'));
+
+	printf("should stay as is %c\n", ft_toupper('A'));
+	printf("should stay as is %c\n", ft_toupper('Z'));
+	printf("should stay as is %c\n", ft_toupper('B'));
+	printf("should stay as is %c\n", ft_toupper('0'));
+	printf("should stay as is %c\n", ft_toupper('9'));
+	printf("should stay as is %c\n", ft_toupper('4'));
+	printf("should stay as is %c\n", ft_toupper('.'));
+	printf("should stay as is %c\n", ft_toupper('`'));
+
+	printf("-----------------\n\n");
 }
 
-#ifdef	D_ITOA
-int				uf_test_itoa(void)
+void check_tolower (void)
 {
-	char		*ret;
-	if (strcmp(ret = ft_itoa(0), "0") != 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_itoa(0).\nExpected ret = \"0\" \
-			   but have ret = \"%s\"\033[0m\n", __LINE__ - 2, __func__, ret);
-		free(ret);
-		return (0);
-	}
-	free(ret);
-	if (strcmp(ret = ft_itoa(-123), "-123") != 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_itoa(-123).\nExpected ret = \"-123\" \
-			   but have ret = \"%s\"\033[0m\n", __LINE__ - 2, __func__, ret);
-		free(ret);
-		return (0);
-	}
-	free(ret);
-	if (strcmp(ret = ft_itoa(123), "123") != 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_itoa(123).\nExpected ret = \"123\" \
-			   but have ret = \"%s\"\033[0m\n", __LINE__ - 2, __func__, ret);
-		free(ret);
-		return (0);
-	}
-	free(ret);
-	if (strcmp(ret = ft_itoa(-2147483648), "-2147483648") != 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_itoa(-2147483648).\nExpected ret = \"-2147483648\" \
-			   but have ret = \"%s\"\033[0m\n", __LINE__ - 2, __func__, ret);
-		free(ret);
-		return (0);
-	}
-	free(ret);
-	if (strcmp(ret = ft_itoa(2147483647), "2147483647") != 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_itoa(2147483647).\nExpected ret = \"2147483647\" \
-			   but have ret = \"%s\"\033[0m\n", __LINE__ - 2, __func__, ret);
-		free(ret);
-		return (0);
-	}
-	free(ret);
-	return (1);
-}
-#endif
+	printf("----- TOLOWER -----\n");
 
-#ifdef	D_STRNEQU
-int				uf_test_strnequ(void)
+	printf("should stay as is %c\n", ft_tolower('a'));
+	printf("should stay as is %c\n", ft_tolower('z'));
+	printf("should stay as is %c\n", ft_tolower('b'));
+	printf("should stay as is %c\n", ft_tolower('0'));
+	printf("should stay as is %c\n", ft_tolower('9'));
+	printf("should stay as is %c\n", ft_tolower('4'));
+	printf("should stay as is %c\n", ft_tolower('.'));
+	printf("should stay as is %c\n", ft_tolower('`'));
+
+	printf("should be lowered %c\n", ft_tolower('A'));
+	printf("should be lowered %c\n", ft_tolower('Z'));
+	printf("should be lowered %c\n", ft_tolower('B'));
+
+	printf("-----------------\n\n");
+}
+
+void check_puts (void)
 {
-	int			ret;
+	printf("----- PUTS ------\n");
 
-	ft_strnequ(NULL, NULL, 0);
-	ft_strnequ(NULL, NULL, 1);
-	ft_strnequ(NULL, "", 1);
-	ft_strnequ("", NULL, 1);
-	ret = 0;
-	if ((ret = ft_strnequ("abc", "abc", 2)) != 1)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strnequ(\"abc\", \"abc\", 2).\nExpected ret = \"1\" \
-			   but have ret = \"%d\"\033[0m\n", __LINE__ - 2, __func__, ret);
-		return (0);
-	}
-	if ((ret = ft_strnequ("cba", "abc", 2)) != 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strnequ(\"cba\", \"abc\", 2).\nExpected ret = \"0\" \
-			   but have ret = \"%d\"\033[0m\n", __LINE__ - 2, __func__, ret);
-		return (0);
-	}
-	if ((ret = ft_strnequ("abc", "cba", 2)) != 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strnequ(\"abc\", \"cba\", 2).\nExpected ret = \"0\" \
-			   but have ret = \"%d\"\033[0m\n", __LINE__ - 2, __func__, ret);
-		return (0);
-	}
-	if ((ret = ft_strnequ("abc", "abd", 2)) != 1)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strnequ(\"abc\", \"abd\", 2).\nExpected ret = \"1\" \
-			   but have ret = \"%d\"\033[0m\n", __LINE__ - 2, __func__, ret);
-		return (0);
-	}
-	if ((ret = ft_strnequ("", "", 3)) != 1)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strnequ(\"\", \"\", 3).\nExpected ret = \"1\" \
-			   but have ret = \"%d\"\033[0m\n", __LINE__ - 2, __func__, ret);
-		return (0);
-	}
-	return (1);
+	int ret = ft_puts("LOLO |");
+	printf("ret %d\n", ret);
+	ft_puts("91005\n");
+	ft_puts("withoutbackslashn");
+	ft_puts("ss\n");
+
+	printf("-----------------\n\n");
 }
-#endif
 
-#ifdef	D_STREQU
-int				uf_test_strequ(void)
+void check_strcat (void)
 {
-	int			ret;
-	char		*str;
+	printf("----- STRCAT ------\n");
 
-	ft_strequ(NULL, NULL);
-	ft_strequ("", NULL);
-	ft_strequ(NULL, "");
-	ret = 0;
-	str = strdup("abc"); /* FIX un faux OK si l'user a mis "if s1 == s2 return 1;" */
-	if ((ret = ft_strequ(str, "abc")) != 1)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strequ(\"abc\", \"abc\").\nExpected ret = \"1\" \
-			   but have ret = \"%d\"\033[0m\n", __LINE__ - 2, __func__, ret);
-		free(str);
-		return (0);
-	}
-	free(str);
-	if ((ret = ft_strequ("cba", "abc")) != 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strequ(\"cba\", \"abc\").\nExpected ret = \"0\" \
-			   but have ret = \"%d\"\033[0m\n", __LINE__ - 2, __func__, ret);
-		return (0);
-	}
-	if ((ret = ft_strequ("abc", "cba")) != 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strequ(\"abc\", \"cba\").\nExpected ret = \"0\" \
-			   but have ret = \"%d\"\033[0m\n", __LINE__ - 2, __func__, ret);
-		return (0);
-	}
-	if ((ret = ft_strequ("", "")) != 1)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strequ(\"\", \"\").\nExpected ret = \"1\" \
-			   but have ret = \"%d\"\033[0m\n", __LINE__ - 2, __func__, ret);
-		return (0);
-	}
-	if ((ret = ft_strequ("abc", "abcd")) != 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strequ(\"abc\", \"abcd\").\nExpected ret = \"0\" \
-			   but have ret = \"%d\"\033[0m\n", __LINE__ - 2, __func__, ret);
-		return (0);
-	}
-	if ((ret = ft_strequ("abcd", "abc")) != 0)
-	{
-		printf("Error Line %d, Funct %s : \n\033[31mft_strequ(\"abcd\", \"abc\").\nExpected ret = \"0\" \
-			   but have ret = \"%d\"\033[0m\n", __LINE__ - 2, __func__, ret);
-		return (0);
-	}
-	return (1);
+	char one[5] = "This\0";
+	char two[12] = " with this.\0";
+
+	printf("ret: [%s]\n", ft_strcat(one, two));
+	printf("one: [%s]\n", one);
+	printf("two: [%s]\n", two);
+
+	printf("-----------------\n\n");
 }
-#endif
 
-#ifdef	D_STRMAPI
-int				uf_test_strmapi(void)
+void check_memset (void)
 {
-	char		str[] = "Hello";
-	char		empty[] = "";
-	char		*ret;
+	printf("----- MEMSET ------\n");
 
-	ft_strmapi(NULL, NULL);
-	ft_strmapi(empty, NULL);
-	ret = ft_strmapi(str, uf_strmapi_callback);
-	if (strcmp(ret, "Hfnos") != 0)
-	{
-		printf("Error Line %d, Funct %s ", __LINE__ - 1, __func__);
-		free(ret);
-		return (0);
-	}
-	free(ret);
-	return (1);
+	char one[6] = "Hello\0";
+	char two[6] = "Hello\0";
+
+	ft_memset(one, 'A', 2);
+	printf("one after memset: [%s]\n", one);
+	printf("ret after memset: [%s]\n", (char *)ft_memset(two, 'A', 2));
+
+	printf("-----------------\n\n");
 }
-#endif
 
-#ifdef	D_STRMAP
-int				uf_test_strmap(void)
+void check_memcpy (void)
 {
-	char		str[] = "Hello";
-	char		*ret;
+	printf("----- MEMCPY ------\n");
 
-	ft_strmap(NULL, NULL);
-	ft_strmap("", NULL);
-	ret = ft_strmap(str, uf_strmap_callback);
-	if (strcmp(ret, "Ifmmp") != 0)
-	{
-		printf("Error Line %d, Funct %s ", __LINE__ - 1, __func__);
-		free(ret);
-		return (0);
-	}
-	free(ret);
-	return (1);
+	char one[6] = "Hello\0";
+	char two[6] = "CHATS\0";
+
+	printf("%p\n", one);
+	printf("%p\n", two);
+	char * res = ft_memcpy(one, two, 2);
+	printf("one after memcpy: [%s] (%p)\n", one, one);
+	printf("two after memcpy: [%s] (%p)\n", two, two);
+	printf("ret after memcpy: [%s] (%p)\n", res, res);
+
+	printf("-----------------\n\n");
 }
-#endif
 
-#ifdef	D_STRITERI
-int				uf_test_striteri(void)
+void check_strdup (void)
 {
-	char		str[] = "Hello";
+	printf("----- STRDUP ------\n");
 
-	ft_striteri(NULL, NULL);
-	ft_striteri(str, NULL);
-	ft_striteri(str, uf_striteri_callback);
-	if (strcmp(str, "Hfnos") != 0)
-		D_ERROR
-	return (1);
+	char str[5] = "Test\0";
+
+	printf("str [%s] ptr [%p]\n", str, str);
+
+	char * cpy = ft_strdup(str);
+
+	printf("cpy [%s] ptr [%p]\n", cpy, cpy);
+
+	printf("-----------------\n\n");
 }
-#endif
 
-#ifdef	D_STRITER
-int				uf_test_striter(void)
+void check_strncat (void)
 {
-	char		str[] = "Hello";
+	printf("----- STRNCAT ------\n");
 
-	ft_striter(NULL, NULL);
-	ft_striter(str, NULL);
-	ft_striter(str, uf_striter_callback);
-	if (strcmp(str, "Ifmmp") != 0)
-		D_ERROR
-	return (1);
+	char dest[50] = {0};
+
+	ft_strncat(dest, "TEST ", 2);
+
+	printf("[%s]\n", dest);
+
+	printf("-----------------\n\n");
 }
-#endif
 
-#ifdef	D_STRCLR
-int				uf_test_strclr(void)
+int main (void)
 {
-	int			i;
-	char		str[] = "Hello";
+	/* Classic shit */
+	check_alpha();
+	check_digit();
+	check_alnum();
+	check_ascii();
+	check_print();
+	check_toupper();
+	check_tolower();
 
-	i = 0;
-	ft_strclr(NULL);
-	ft_strclr(str);
-	while (i < 6)
-	{
-		if (str[i] != '\0')
-			D_ERROR
-	i = i + 1;
-	}
-	return (1);
+	/* Put */
+	check_puts();
+
+	/* Memory */
+	check_bzero();
+	check_memset();
+	check_memcpy();
+	check_strdup();
+
+	/* Strings */
+	check_strcat();
+	check_strncat();
+	check_strlen();
+
+	return 0;
 }
-#endif
-
-#ifdef	D_STRDEL
-int				uf_test_strdel(void)
-{
-	char		*ret;
-
-	ft_strdel(NULL);
-	ret = ft_strnew(4);
-	ft_strdel(&ret);
-	if (ret != NULL)
-		D_ERROR
-	ret = ft_strnew(0);
-	ft_strdel(&ret);
-	if (ret != NULL)
-		D_ERROR
-	return (1);
-}
-#endif
-
-#ifdef	D_STRNEW
-int				uf_test_strnew(void)
-{
-	char		*ret;
-	int			i;
-
-	i = 0;
-	ret = ft_strnew(4);
-	if (ret != NULL)
-	{
-		while (i < 5)
-		{
-			if (ret[i] != '\0')
-				D_ERROR
-			i = i + 1;
-		}
-	}
-	return (1);
-}
-#endif
-
-#ifdef	D_MEMALLOC_AND_DEL
-int				uf_test_memalloc_and_del(void)
-{
-	void		*ret;
-
-	ret = ft_memalloc(4);
-	ft_memdel(&ret);
-	if (ret != NULL)
-		D_ERROR
-	return (1);
-}
-#endif
-
-#ifdef	D_TOLOWER
-int				uf_test_tolower(void)
-{
-	int			i;
-
-	i = -300;
-	while (i < 300)
-	{
-		if (tolower(i) != ft_tolower(i))
-			D_ERROR
-		i = i + 1;
-	}
-	return (1);
-}
-#endif
-
-#ifdef	D_TOUPPER
-int				uf_test_toupper(void)
-{
-	int			i;
-
-	i = -300;
-	while (i < 300)
-	{
-		if (toupper(i) != ft_toupper(i))
-			D_ERROR
-		i = i + 1;
-	}
-	return (1);
-}
-#endif
-
-#ifdef	D_ISPRINT
-int				uf_test_isprint(void)
-{
-	int			i;
-
-	i = -300;
-	while (i < 300)
-	{
-		if (isprint(i) != ft_isprint(i))
-			D_ERROR
-		i = i + 1;
-	}
-	return (1);
-}
-#endif
-
-#ifdef	D_ISASCII
-int				uf_test_isascii(void)
-{
-	int			i;
-
-	i = -300;
-	while (i < 300)
-	{
-		if (isascii(i) != ft_isascii(i))
-			D_ERROR
-		i = i + 1;
-	}
-	return (1);
-}
-#endif
-
-#ifdef	D_ISALNUM
-int				uf_test_isalnum(void)
-{
-	int			i;
-
-	i = -300;
-	while (i < 300)
-	{
-		if (isalnum(i) != ft_isalnum(i))
-			D_ERROR
-		i = i + 1;
-	}
-	return (1);
-}
-#endif
-
-#ifdef	D_ISDIGIT
-int				uf_test_isdigit(void)
-{
-	int			i;
-
-	i = -300;
-	while (i < 300)
-	{
-		if (isdigit(i) != ft_isdigit(i))
-			D_ERROR
-		i = i + 1;
-	}
-	return (1);
-}
-#endif
-
-#ifdef	D_ISALPHA
-int				uf_test_isalpha(void)
-{
-	int			i;
-
-	i = -300;
-	while (i < 300)
-	{
-		if (isalpha(i) != ft_isalpha(i))
-			D_ERROR
-		i = i + 1;
-	}
-	return (1);
-}
-#endif
-
-#ifdef	D_ATOI
-int				uf_test_atoi(void)
-{
-	size_t		i, j;
-	char		str[12] = {0};
-
-	if (atoi("\n\v\t\r\f -123") != ft_atoi("\n\v\t\r\f -123"))
-		D_ERROR
-	if (atoi("12-3") != ft_atoi("12-3"))
-		D_ERROR
-	if (atoi("-+123") != ft_atoi("-+123"))
-		D_ERROR
-	if (atoi("a123") != ft_atoi("a123"))
-		D_ERROR
-	if (atoi("123a") != ft_atoi("123a"))
-		D_ERROR
-	if (atoi("123") != ft_atoi("123"))
-		D_ERROR
-	if (atoi("-123") != ft_atoi("-123"))
-		D_ERROR
-	if (atoi("+123") != ft_atoi("+123"))
-		D_ERROR
-	if (atoi(" - 123") != ft_atoi(" - 123"))
-		D_ERROR
-	if (atoi("\t -123") != ft_atoi("\t -123"))
-		D_ERROR
-	if (atoi("-2147483648") != ft_atoi("-2147483648"))
-		D_ERROR
-	if (atoi("2147483647") != ft_atoi("2147483647"))
-		D_ERROR
-	if (atoi("") != ft_atoi(""))
-		D_ERROR
-	i = 0;
-	while (i < RANDT)
-	{
-		j = 0;
-		while (j < 11)
-		{
-			str[j] = ((char)rand() % 10) + '0';
-			j++;
-		}
-		str[11] = 0;
-		if (atoi(str) != ft_atoi(str))
-			D_ERROR
-		i++;
-	}
-	return (1);
-}
-#endif
-
-/*
-** Don't be stupid ppl, be careful with this noob noob noob test
-*/
-
-#ifdef	D_STRNCMP
-int				uf_test_strncmp(void)
-{
-	int			a;
-
-	a = ft_strncmp("abc", "abc", 2);
-#ifdef  __clang__
-	if (strncmp("abc", "abc", 2) != a)
-		D_ERROR;
-#else
-	if (a)
-		D_ERROR;
-#endif
-
-	a =  ft_strncmp("cba", "abc", 2);
-#ifdef  __clang__
-	if (strncmp("cba", "abc", 2) != a)
-		D_ERROR;
-#else
-	if (!a)
-		D_ERROR;
-#endif
-
-	a =  ft_strncmp("abc", "cba", 2);
-#ifdef  __clang__
-	if (strncmp("abc", "cba", 2) != a)
-		D_ERROR;
-#else
-	if (!a)
-		D_ERROR;
-#endif
-
-	a = ft_strncmp("", "", 3);
-#ifdef  __clang__
-	if (strncmp("", "", 3) != a)
-		D_ERROR;
-#else
-	if (a)
-		D_ERROR;
-#endif
-
-	a = ft_strncmp("q", "a", 0);
-#ifdef  __clang__
-	if (strncmp("q", "a", 0) != a)
-		D_ERROR;
-#else
-	if (a)
-		D_ERROR;
-#endif
-
-	a = ft_strncmp("abc", "abd", 2);
-#ifdef  __clang__
-	if(strncmp("abc", "abd", 2) != a)
-		D_ERROR;
-#else
-	if (a)
-		D_ERROR;
-#endif
-
-	return (1);
-}
-#endif
-
-/*
-** Don't be stupid ppl, be careful with this noob noob noob test
-*/
-
-#ifdef	D_STRCMP
-int				uf_test_strcmp(void)
-{
-	int			a;
-
-	a = ft_strcmp("abc", "abc");
-#ifdef  __clang__
-	if (a != strcmp("abc", "abc"))
-		D_ERROR;
-#endif
-#ifndef  __clang__
-	if (a)
-		D_ERROR;
-#endif
-	a = ft_strcmp("cba", "abc");
-#ifdef  __clang__
-	if (a != strcmp("cba", "abc"))
-		D_ERROR;
-#endif
-#ifndef  __clang__
-	if (!a)
-		D_ERROR;
-#endif
-	a = ft_strcmp("abc", "cba");
-#ifdef  __clang__
-	if (a != strcmp("abc", "cba"))
-		D_ERROR;
-#endif
-#ifndef  __clang__
-	if (!a)
-		D_ERROR;
-#endif
-	if (ft_strcmp("", "") != strcmp("", ""))
-		D_ERROR;
-	return (1);
-}
-#endif
-
-#ifdef	D_STRNSTR
-int				uf_test_strnstr(void)
-{
-	char		*str = "Hello les genw";
-
-
-	if (strnstr(str, "Hello", 6) != ft_strnstr(str, "Hello", 6))
-		D_ERROR;
-	if (strnstr(str, "Hello", 3) != ft_strnstr(str, "Hello", 3))
-		D_ERROR;
-	if (strnstr(str, "les", 1) != ft_strnstr(str, "les", 1))
-		D_ERROR;
-	if (strnstr(str, "gen", 2) != ft_strnstr(str, "gen", 2))
-		D_ERROR;
-	if (strnstr(str, "w", 0) != ft_strnstr(str, "w", 0))
-		D_ERROR;
-	if (strnstr(str, "", 3) != ft_strnstr(str, "", 3))
-		D_ERROR;
-	return (1);
-}
-#endif
-
-#ifdef	D_STRSTR
-int				uf_test_strstr(void)
-{
-	char		*str = "Hello les genw";
-
-	if (strstr(str, "Hello") != ft_strstr(str, "Hello"))
-		D_ERROR;
-	if (strstr(str, "les") != ft_strstr(str, "les"))
-		D_ERROR;
-	if (strstr(str, "gen") != ft_strstr(str, "gen"))
-		D_ERROR;
-	if (strstr(str, "w") != ft_strstr(str, "w"))
-		D_ERROR;
-	if (strstr(str, "") != ft_strstr(str, ""))
-		D_ERROR;
-	if (strstr("", "") != ft_strstr("", ""))
-		D_ERROR;
-	return (1);
-}
-#endif
-
-#ifdef	D_STRRCHR
-int				uf_test_strrchr(void)
-{
-	char		str[] = "Hello je tesx";
-
-	if (strrchr(str, 'H') != ft_strrchr(str, 'H'))
-	{
-		printf("notre=%s\nvotre=%s\n", strrchr(str, 'H'), ft_strrchr(str, 'H'));
-		D_ERROR
-	}
-	if (strrchr(str, 'j') != ft_strrchr(str, 'j'))
-	{
-		printf("\nnotre=%s\nvotre=%s\n", strrchr(str, 'j'), ft_strrchr(str, 'j'));
-        D_ERROR
-	}
-	if (strrchr(str, 'x') != ft_strrchr(str, 'x'))
-	{
-		printf("\nnotre=%s\nvotre=%s\n", strrchr(str, 'x'), ft_strrchr(str, 'x'));
-        D_ERROR
-	}
-	if (strrchr(str, 0) != ft_strrchr(str, 0))
-	{
-		printf("\nnotre=%s\nvotre=%s\n", strrchr(str, 0), ft_strrchr(str, 0));
-        D_ERROR
-	}
-	return (1);
-}
-#endif
-
-#ifdef	D_STRCHR
-int				uf_test_strchr(void)
-{
-	char		str[] = "Hello je tesx";
-
-	if (strchr(str, 'H') != ft_strchr(str, 'H'))
-		D_ERROR
-	if (strchr(str, 'j') != ft_strchr(str, 'j'))
-		D_ERROR
-	if (strchr(str, 'x') != ft_strchr(str, 'x'))
-		D_ERROR
-	if (strchr(str, 'y') != ft_strchr(str, 'y'))
-		D_ERROR
-	if (strchr(str, 0) != ft_strchr(str, 0))
-		D_ERROR
-	return (1);
-}
-#endif
-
-/*
-** Not HardCore but better than original
-** Fixes by pmotte
-*/
-
-#ifdef	D_STRLCAT
-int				uf_test_strlcat(void)
-{
-	char		dest[50] = {0};
-	char		dest2[50] = {0};
-	size_t		i, j, k;
-
-	if (strlcat(dest, "Hello ", 4) != ft_strlcat(dest2, "Hello ", 4))
-		D_ERROR
-	memset(dest, 0, sizeof(dest));
-	memset(dest2, 0, sizeof(dest));
-	j = strlcat(dest, "Hello ", 4);
-	k = ft_strlcat(dest2, "Hello ", 4);
-	if (strcmp(dest, dest2) != 0 || j != k)
-		D_ERROR
-	j = strlcat(dest, "Hello ", 1);
-	k = ft_strlcat(dest2, "Hello ", 1);
-	if (strcmp(dest, dest2) != 0 || j != k)
-		D_ERROR
-	i = 0;
-	while (i < 6)
-	{
-		dest[4 + i] = 'z';
-		dest2[4 + i] = 'z';
-		++i;
-	}
-	j = strlcat(dest, "abc", 6);
-	k = ft_strlcat(dest2, "abc", 6);
-	if (strcmp(dest, dest2) != 0 || j != k)
-		D_ERROR
-	return (1);
-}
-#endif
-
-/*
-** Better than original by mfontain
-*/
-
-#ifdef	D_STRNCAT
-int				uf_test_strncat(void)
-{
-	char		dest[50] = {0};
-	char		dest2[50] = {0};
-
-	if (strncat(dest, "hello ", 2) != ft_strncat(dest, "hello ", 2))
-		D_ERROR
-	memset(dest, 0, sizeof(dest));
-	strncat(dest, "Hello ", 4);
-	ft_strncat(dest2, "Hello ", 4);
-	if (strcmp(dest, dest2) != 0)
-		D_ERROR
-	strncat(dest, "Hello ", 2);
-	ft_strncat(dest2, "Hello ", 2);
-	if (strcmp(dest, dest2) != 0)
-		D_ERROR
-	strncat(dest, "Hello ", 10);
-    	ft_strncat(dest2, "Hello ", 10);
-    	if (strcmp(dest, dest2) != 0)
-    	    D_ERROR
-	strncat(dest, "1234\n78", 7);
-    	ft_strncat(dest2, "1234\n78", 7);
-    	if (strcmp(dest, dest2) != 0)
-        	D_ERROR
-	return (1);
-}
-#endif
-
-#ifdef	D_STRCAT
-int				uf_test_strcat(void)
-{
-	char		dest[50] = {0};
-	char		dest2[50] = {0};
-
-	if (strcat(dest, "hello ") != ft_strcat(dest, "hello "))
-		D_ERROR
-	memset(dest, 0, sizeof(dest));
-	strcat(dest, "Hello ");
-	ft_strcat(dest2, "Hello ");
-	if (strcmp(dest, dest2) != 0)
-		D_ERROR
-	strcat(dest, "Hello ");
-	ft_strcat(dest2, "Hello ");
-	if (strcmp(dest, dest2) != 0)
-		D_ERROR
-	return (1);
-}
-#endif
-
-#ifdef	D_STRNCPY
-int				uf_test_strncpy(void)
-{
-	char		ctab[11], ctab2[21], ctab3[21];
-	int			i, j;
-	size_t		k;
-
-	k = 0;
-	while (k < 21)
-	{
-		i = 0;
-		while (i < RANDT)
-		{
-			j = 0;
-			while (j < 21)
-			{
-				if (j < 11)
-					ctab[j] = ((char)rand() % 26) + 'a';
-				ctab2[j] = 'Z';
-				ctab3[j] = 'Z';
-				j++;
-			}
-			ctab[10] = 0;
-			ctab2[20] = 0;
-			ctab3[20] = 0;
-			if (strncpy(ctab2, ctab, k) != ctab2 || ft_strncpy(ctab3, ctab, k) != ctab3)
-				D_ERROR
-			if (strcmp(ctab2, ctab3))
-				D_ERROR
-			++i;
-		}
-		k++;
-	}
-	return (1);
-}
-#endif
-
-#ifdef	D_STRCPY
-int				uf_test_strcpy(void)
-{
-	char		dest[50] = {0};
-	char		dest2[50] = {0};
-
-
-	char			ctab[11], ctab2[11], ctab3[11];
-    int				i, j;
-    size_t			k;
-
-    k = 0;
-    while (k <= sizeof(ctab))
-    {
-        i = 0;
-        while (i < RANDT)
-        {
-            j = 0;
-            while (j < 11)
-            {
-                ctab[j] = (char)rand();
-                ctab2[j] = 0; ctab3[j] = 0;
-                j++;
-            }
-			ctab[10] = 0;
-			if (strcpy(ctab2, ctab) != ctab2 || ft_strcpy(ctab3, ctab) != ctab3)
-				D_ERROR
-			if (strcmp(ctab2, ctab3))
-                D_ERROR
-			++i;
-		}
-		k++;
-	}
-	if (strcpy(dest, "Hello foo") != ft_strcpy(dest, "Hello foo"))
-		D_ERROR
-	strcpy(dest, "Hello foo");
-	ft_strcpy(dest2, "Hello foo");
-	if (strcmp(dest, dest2) != 0)
-		D_ERROR
-	strcpy(dest, "Hello");
-	ft_strcpy(dest2, "Hello");
-	if (strcmp(dest, dest2) != 0)
-		D_ERROR
-	return (1);
-}
-#endif
-
-#ifdef	D_STRDUP
-int				uf_test_strdup(void)
-{
-	char		*ret1;
-	char		*ret2;
-
-	ret1 = strdup("");
-	ret2 = ft_strdup("");
-	if (strcmp(ret1, ret2) != 0)
-		D_ERROR
-	free(ret1);
-	free(ret2);
-	ret1 = strdup("hello");
-	ret2 = ft_strdup("hello");
-	if (strcmp(ret1, ret2) != 0)
-		D_ERROR
-	free(ret1);
-	free(ret2);
-	return (1);
-}
-#endif
-
-#ifdef	D_STRLEN
-int				uf_test_strlen(void)
-{
-	if (strlen("") != ft_strlen(""))
-		D_ERROR
-	if (strlen("abc") != ft_strlen("abc"))
-		D_ERROR
-	if (strlen("a") != ft_strlen("a"))
-		D_ERROR
-	return (1);
-}
-#endif
-
-#ifdef	D_MEMMOVE
-int				uf_test_memmove(void)
-{
-	char		str[] = "memmove can be very useful......";
-	char		str2[] = "memmove can be very useful......";
-	char		str3[] = "memmove can be very useful......";
-	char		str4[] = "memmove can be very useful......";
-
-	char		s1[101], t1[101];
-	char		s2[101], t2[101];
-	size_t		i, j;
-
-	i = 0;
-	while (i < RANDT)
-	{
-		j = 0;
-		while (j < 100)
-		{
-			s1[j] = (char)rand();
-			s2[j] = (char)rand();
-			j++;
-		}
-		s1[100] = 0;    s2[100] = 0;
-		memcpy(t1, s1, sizeof(s1));
-		memcpy(t2, s2, sizeof(s2));
-		if (strcmp(memmove(str + 10, str + 5, 10), ft_memmove(str2 + 10, str2 + 5, 10)) != 0)
-			D_ERROR
-		if (strcmp(memmove(str3 + 5, str3 + 10, 10), ft_memmove(str4 + 5, str4 + 10, 10)) != 0)
-			D_ERROR
-		if (strcmp(memmove(s1, s2, 2), ft_memmove(t1, t2, 2)) != 0)
-			D_ERROR
-		if (strcmp(memmove(s1, s1 + 25, 30), ft_memmove(t1, t1 + 25, 30)) != 0)
-			D_ERROR
-		if (strcmp(memmove(s1 + 30, s1, 40), ft_memmove(t1 + 30, t1, 40)) != 0)
-			D_ERROR
-		++i;
-	}
-	return (1);
-}
-#endif
-
-#ifdef	D_MEMCHR
-int				uf_test_memchr(void)
-{
-	char			ctab[11];
-	int				itab[11];
-	unsigned long	ltab[11];
-	size_t			j;
-	int				i;
-
-	i = -300;
-	memchr(NULL, 0, 0);
-	ft_memchr(NULL, 0, 0);
-	while (i < 300)
-	{
-		j = 0;
-		while (j < 11)
-		{
-			ctab[j] = (char)rand();
-			itab[j] = rand();
-			ltab[j] = (unsigned long)rand() * LONG;
-			j++;
-		}
-		if (memchr(ctab, i, sizeof(ctab)) != ft_memchr(ctab, i, sizeof(ctab)))
-			D_ERROR
-		if (memchr(itab, i, sizeof(itab)) != ft_memchr(itab, i, sizeof(itab)))
-			D_ERROR
-		if (memchr(ltab, i, sizeof(ltab)) != ft_memchr(ltab, i, sizeof(ltab)))
-			D_ERROR
-		++i;
-	}
-	return (1);
-}
-#endif
-
-#ifdef	D_MEMCMP
-int				uf_test_memcmp(void)
-{
-    char            ctab[11], ctab2[11];
-    int             itab[11], itab2[11];
-    unsigned long   ltab[11], ltab2[11];
-    size_t          i, j;
-
-#ifdef	__clang__
-	if (memcmp(NULL, NULL, 0) != ft_memcmp(NULL, NULL, 0))
-		D_ERROR
-#endif
-    i = 0;
-    while (i < 11)
-    {
-        j = 0;
-        while (j < 11)
-        {
-            ctab[j] = (char)rand();
-            ctab2[j] = (char)rand();
-			itab[j] = rand();
-			itab2[j] = rand();
-            ltab[j] = (unsigned long)rand() * LONG;
-			ltab2[j] = (unsigned long)rand() * LONG;
-            j++;
-        }
-		if (memcmp(ctab, ctab2, sizeof(ctab)) != ft_memcmp(ctab, ctab2, sizeof(ctab)))
-            D_ERROR
-        memcpy(ctab2, ctab, sizeof(ctab));
-		if (memcmp(ctab, ctab2, sizeof(ctab)) != ft_memcmp(ctab, ctab2, sizeof(ctab)))
-            D_ERROR
-		if (memcmp(itab, itab2, sizeof(itab)) != ft_memcmp(itab, itab2, sizeof(itab)))
-            D_ERROR
-		memcpy(itab2, itab, sizeof(itab));
-        if (memcmp(itab, itab2, sizeof(itab)) != ft_memcmp(itab, itab2, sizeof(itab)))
-            D_ERROR
-		if (memcmp(ltab, ltab2, sizeof(ltab)) != ft_memcmp(ltab, ltab2, sizeof(ltab)))
-            D_ERROR
-		memcpy(ltab2, ltab, sizeof(ltab));
-        if (memcmp(ltab, ltab2, sizeof(ltab)) != ft_memcmp(ltab, ltab2, sizeof(ltab)))
-            D_ERROR
-				++i;
-    }
-	return (1);
-}
-#endif
-
-#ifdef	D_MEMCCPY
-int				uf_test_memccpy(void)
-{
-	char			ctab[11], ctab2[11], ctab3[11];
-	int				itab[11], itab2[11], itab3[11];
-	unsigned long	ltab[11], ltab2[11], ltab3[11];
-	int				i, j;
-	size_t			k;
-	void			*temp, *temp2;
-
-#ifdef	__clang__
-	memccpy(NULL, NULL, 0, 0);
-	ft_memccpy(NULL, NULL, 0, 0);
-#endif
-	k = 0;
-	while (k <= sizeof(ltab))
-	{
-		i = 0;
-		while (i < RANDT)
-		{
-			j = 0;
-			while (j < 11)
-			{
-				ctab[j] = (char)rand();
-				ctab2[j] = 0; ctab3[j] = 0;
-				itab[j] = rand();
-				itab2[j] = 0; itab3[j] = 0;
-				ltab[j] = (unsigned long)rand() * LONG;
-				ltab2[j] = 0; ltab3[j] = 0;
-				j++;
-			}
-			temp = memccpy(ctab2, ctab, 'a', (k < sizeof(ctab)) ? k : sizeof(ctab));
-			memcpy(ctab3, ctab2, sizeof(ctab));
-			temp2 = ft_memccpy(ctab2, ctab, 'a', (k < sizeof(ctab)) ? k : sizeof(ctab));
-			if ((memcmp(ctab2, ctab3, sizeof(ctab)) != 0 || (temp != temp2)))
-				D_ERROR
-			temp = memccpy(itab2, itab, 'a', (k < sizeof(itab)) ? k : sizeof(itab));
-			memcpy(itab3, itab2, sizeof(itab));
-			temp2 = ft_memccpy(itab2, itab, 'a', (k < sizeof(itab)) ? k : sizeof(itab));
-			if ((memcmp(itab2, itab3, sizeof(itab)) != 0 || (temp != temp2)))
-				D_ERROR
-			temp = memccpy(ltab2, ltab, 'a', (k < sizeof(ltab)) ? k : sizeof(ltab));
-			memcpy(ltab3, ltab2, sizeof(ltab));
-			temp2 = ft_memccpy(ltab2, ltab, 'a', (k < sizeof(ltab)) ? k : sizeof(ltab));
-			if ((memcmp(ltab2, ltab3, sizeof(ltab)) != 0 || (temp != temp2)))
-				D_ERROR
-			++i;
-		}
-		++k;
-	}
-	return (1);
-}
-#endif
-
-#ifdef	D_MEMCPY
-int					uf_test_memcpy(void)
-{
-	char			ctab[11], ctab2[11], ctab3[11];
-	int				itab[11], itab2[11], itab3[11];
-	unsigned long	ltab[11], ltab2[11], ltab3[11];
-	int				i, j;
-	size_t			k;
-	void			*temp, *temp2, *temp3;
-
-#ifdef	__clang__
-	memcpy(NULL, NULL, 0);
-	ft_memcpy(NULL, NULL, 0);
-#endif
-	k = 0;
-	while (k <= sizeof(ltab))
-	{
-		i = 0;
-		while (i < RANDT)
-		{
-			j = 0;
-			while (j < 11)
-			{
-				ctab[j] = (char)rand();
-				ctab2[j] = 0; ctab3[j] = 0;
-				itab[j] = rand();
-				itab2[j] = 0; itab3[j] = 0;
-				ltab[j] = (unsigned long)rand() * LONG;
-				ltab2[j] = 0; ltab3[j] = 0;
-				j++;
-			}
-			memcpy(ctab2, ctab, (k < sizeof(ctab)) ? k : sizeof(ctab));
-			temp = ft_memcpy(ctab3, ctab, (k < sizeof(ctab)) ? k : sizeof(ctab));
-			memcpy(itab2, itab, (k < sizeof(itab)) ? k : sizeof(itab));
-			temp2 = ft_memcpy(itab3, itab, (k < sizeof(itab)) ? k : sizeof(itab));
-			memcpy(ltab2, ltab, (k < sizeof(ltab)) ? k : sizeof(ltab));
-			temp3 = ft_memcpy(ltab3, ltab, (k < sizeof(ltab)) ? k : sizeof(ltab));
-			if ((memcmp(itab2, itab3, sizeof(itab)) != 0 || (temp2 != itab3)))
-				D_ERROR
-			if (memcmp(ctab2, ctab3, sizeof(ctab)) != 0 || temp != ctab3)
-				D_ERROR
-			if (memcmp(ltab2, ltab3, sizeof(ltab)) != 0 ||( temp3 != ltab3))
-				D_ERROR
-			++i;
-		}
-		++k;
-	}
-	return (1);
-}
-#endif
-
-#ifdef	D_MEMSET
-int					uf_test_memset(void)
-{
-	char			ctab[11], ctab2[11];
-	int				itab[11], itab2[11];
-	unsigned long	ltab[11], ltab2[11];
-	size_t			i, j, k;
-	void			*temp, *temp2;
-
-#ifdef	__clang__
-	memset(NULL, 0, 0);
-	ft_memset(NULL, 0, 0);
-#endif
-	k = 0;
-	while (k <= sizeof(ltab))
-	{
-		i = 0;
-		while (i < RANDT)
-		{
-			j = 0;
-			while (j < 11)
-			{
-				ctab[j] = (char)rand();
-				itab[j] = rand();
-				ltab[j] = (unsigned long)rand() * LONG;
-				j++;
-			}
-			memcpy(ctab2, ctab, sizeof(ctab));
-			memcpy(itab2, itab, sizeof(itab));
-			memcpy(ltab2, ltab, sizeof(ltab));
-			temp = ft_memset(itab, i, (k < sizeof(itab)) ? k : sizeof(itab));
-			temp2 = memset(itab2, i, (k < sizeof(itab)) ? k : sizeof(itab));
-			if (memcmp(itab, itab2, sizeof(itab)) != 0 || temp != itab || temp2 != itab2)
-				D_ERROR
-			temp = ft_memset(ctab, i, (k < sizeof(ctab)) ? k : sizeof(ctab));
-			temp2 = memset(ctab2, i, (k < sizeof(ctab)) ? k : sizeof(ctab));
-			if (memcmp(ctab, ctab2, sizeof(ctab)) != 0 || temp != ctab || temp2 != ctab2)
-				D_ERROR
-			temp = ft_memset(ltab, i, (k < sizeof(ltab)) ? k : sizeof(ltab));
-			temp2 = memset(ltab2, i, (k < sizeof(ltab)) ? k : sizeof(ltab));
-			if (memcmp(ltab, ltab2, sizeof(ltab)) != 0 || temp != ltab || temp2 != ltab2)
-				D_ERROR
-			++i;
-		}
-		++k;
-	}
-	return (1);
-}
-#endif
-
-#ifdef	D_BZERO
-int					uf_test_bzero(void)
-{
-	char			ctab[11], ctab2[11];
-	int				itab[11], itab2[11];
-	unsigned long	ltab[11], ltab2[11];
-	size_t			i, j;
-
-	i = 0;
-#ifdef	__clang__
-	bzero(NULL, 0);
-	ft_bzero(NULL, 0);
-#endif
-	while (i < 11)
-	{
-		j = 0;
-		while (j < 11)
-		{
-			ctab[j] = (char)rand();
-			itab[j] = rand();
-			ltab[j] = (unsigned long)rand() * LONG;
-			j++;
-		}
-		memcpy(ctab2, ctab, sizeof(ctab));
-		memcpy(itab2, itab, sizeof(itab));
-		memcpy(ltab2, ltab, sizeof(ltab));
-		bzero(ctab2, i);
-		ft_bzero(ctab, i);
-		if (memcmp(ctab, ctab2, sizeof(ctab)) != 0)
-			D_ERROR
-		bzero(itab2, i);
-		ft_bzero(itab, i);
-		if (memcmp(itab, itab2, sizeof(itab)) != 0)
-			D_ERROR
-		bzero(ltab2, i);
-		ft_bzero(ltab, i);
-		if (memcmp(ltab, ltab2, sizeof(ltab)) != 0)
-			D_ERROR
-		++i;
-	}
-	return (1);
-}
-#endif

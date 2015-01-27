@@ -71,4 +71,14 @@ LIB_FLAGS = -L. -lfts
 $(TEST): $(NASM_OBJ) main.c
 	gcc $(FLAGS) main.c $(LIB_FLAGS) -o $(TEST) -I inc
 
+# ---------------------------------------------------------------------------- #
+
+CAT = cat
+
+FLAGS     = -Wall -Werror -Wextra
+LIB_FLAGS = -L. -lfts
+
+$(CAT): $(NASM_OBJ) main.c
+	gcc $(FLAGS) main_cat.c $(LIB_FLAGS) -o $(CAT) -I inc
+
 .PHONY: all clean fclean re

@@ -24,6 +24,7 @@ section .text
 _ft_puts:
 
   mov rcx, rdi
+
   call _ft_strlen
 
   mov rdx, rax
@@ -32,8 +33,7 @@ _ft_puts:
   mov rsi, rcx
   syscall
 
-  cmp rax, 1
-  jne error
+  jc error
 
   mov rax, 0x2000004
   mov rdi, 1
@@ -41,8 +41,9 @@ _ft_puts:
   mov rdx, 1
   syscall
 
-  cmp rax, 1
-  jne error
+  jc error
+
+	mov rax, 1
 
   ret
 

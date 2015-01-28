@@ -21,6 +21,7 @@ NASM       = nasm
 NASM_FLAGS = -f macho64
 
 NASM_FILES = ft_puts.s \
+						 ft_putsfd.s \
 						 ft_bzero.s \
 						 ft_strlen.s \
 						 ft_isalpha.s \
@@ -71,7 +72,7 @@ TEST = test
 FLAGS     = -Wall -Werror -Wextra
 LIB_FLAGS = -L. -lfts
 
-$(TEST): $(NASM_OBJ) main.c
+$(TEST): $(LIBFT) $(NASM_OBJ) main.c
 	gcc $(FLAGS) main.c $(LIB_FLAGS) -o $(TEST) -I inc
 
 # ---------------------------------------------------------------------------- #

@@ -3,7 +3,7 @@
 ;     ██╗  ██╗██████╗                                                          ;
 ;     ██║  ██║╚════██╗                                                         ;
 ;     ███████║ █████╔╝              created by: bgronon                        ;
-;     ╚════██║██╔═══╝                       at: 2015-01-22 10:00:02            ;
+;     ╚════██║██╔═══╝                       at: 2015-01-23 11:08:02            ;
 ;          ██║███████╗                                                         ;
 ;          ╚═╝╚══════╝                                                         ;
 ;     ███████╗ █████╗ ██╗   ██╗ █████╗ ████████╗████████╗ █████╗ ███████╗      ;
@@ -15,32 +15,50 @@
 ;                                                                              ;
 ; ============================================================================ ;
 
-global _ft_strlen
+extern _ft_strlen
+
+global _ft_putsfd
 
 section .text
 
-_ft_strlen:
+_ft_putsfd:
 
 	push rdi
 	push rsi
-	push rcx
 
-	cld
+  mov rcx, rdi
+	mov r9, rsi
+  call _ft_strlen
 
-	xor rcx, rcx
-	not rcx
+  mov rdx, rax
+  mov rax, 0x2000004
+  mov rdi, 2
+  mov rsi, rcx
+  syscall
 
-	mov al, 0
+  jc error
 
-	repne scasb
+  mov rax, 0x2000004
+  mov rdi, 2
+	lea rsi, [rel newline]
+  mov rdx, 1
+  syscall
 
-	mov rax, rcx
-	not rax
-	dec rax
+  jc error
 
-	pop rcx
 	pop rsi
 	pop rdi
 
-out:
   ret
+
+error:
+
+	pop rsi
+	pop rdi
+
+  mov rax, -1
+  ret
+
+section .data
+
+newline: db 0xa

@@ -29,6 +29,7 @@ int     ft_toupper (int c);
 int     ft_tolower (int c);
 
 int     ft_puts (const char * str);
+int     ft_putsfd (const char * str, int fd);
 
 size_t  ft_strlen (const char * s);
 char *  ft_strcat (char * s1, const char * s2);

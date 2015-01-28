@@ -203,6 +203,18 @@ void check_puts (void)
 	printf("-----------------\n\n");
 }
 
+void check_putsfd (void)
+{
+	printf("----- PUTSFD ------\n");
+
+	ft_putsfd("LOLO |", 2);
+	ft_putsfd("91005\n", 2);
+	ft_putsfd("withoutbackslashn", 2);
+	ft_putsfd("ss\n", 2);
+
+	printf("-----------------\n\n");
+}
+
 void check_strcat (void)
 {
 	printf("----- STRCAT ------\n");
@@ -385,6 +397,7 @@ int main (void)
 
 	/* Put */
 	check_puts();
+	check_putsfd();
 
 	/* Memory */
 	check_bzero();

@@ -21,6 +21,9 @@ section .text
 
 _ft_strlen:
 
+	push rdi
+	push rsi
+
 	cld
 
 	xor rcx, rcx
@@ -33,6 +36,9 @@ _ft_strlen:
 	mov rax, rcx
 	not rax
 	dec rax
+
+	pop rsi
+	pop rdi
 
 out:
   ret

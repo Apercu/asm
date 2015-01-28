@@ -345,6 +345,33 @@ void check_strncmp (void)
 	printf("-----------------\n\n");
 }
 
+void check_indexof (void)
+{
+	printf("----- INDEXOF ------\n");
+
+	char * a = "aaa";
+	char c = 'a';
+
+	printf("%c in '%s' = %d \n", c, a, ft_indexof(a, c));
+
+	a = "bbb";
+	c = 'a';
+
+	printf("%c in '%s' = %d \n", c, a, ft_indexof(a, c));
+
+	a = "abcdef";
+	c = 'e';
+
+	printf("%c in '%s' = %d \n", c, a, ft_indexof(a, c));
+
+	a = "";
+	c = 'a';
+
+	printf("%c in '%s' = %d \n", c, a, ft_indexof(a, c));
+
+	printf("-----------------\n\n");
+}
+
 int main (void)
 {
 	/* Classic shit */
@@ -371,6 +398,7 @@ int main (void)
 	check_strlen();
 	check_strcmp();
 	check_strncmp();
+	check_indexof();
 
 	return 0;
 }

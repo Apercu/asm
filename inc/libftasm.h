@@ -40,9 +40,10 @@ char *	ft_strdup (const char * s1);
 
 void		ft_cat (int fd);
 
-/* Bonus */
+
 char *	ft_strncat (char * s1, const char * s2, size_t n);
-int			ft_strcmp (const char *s1, const char *s2);
-int			ft_strncmp (const char *s1, const char *s2, size_t n);
+int			ft_strcmp (const char * s1, const char * s2);
+int			ft_strncmp (const char * s1, const char * s2, size_t n);
+int			ft_indexof (char * str, char c);
 
 #endif

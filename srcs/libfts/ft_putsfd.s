@@ -49,6 +49,8 @@ _ft_putsfd:
 	pop rsi
 	pop rdi
 
+	mov rax, 1
+
   ret
 
 error:

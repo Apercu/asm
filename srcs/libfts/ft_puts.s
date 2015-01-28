@@ -23,6 +23,9 @@ section .text
 
 _ft_puts:
 
+	push rdi
+	push rsi
+
   mov rcx, rdi
 
   call _ft_strlen
@@ -43,11 +46,18 @@ _ft_puts:
 
   jc error
 
+	pop rsi
+	pop rdi
+
 	mov rax, 1
 
   ret
 
 error:
+
+	pop rsi
+	pop rdi
+
   mov rax, -1
   ret
 

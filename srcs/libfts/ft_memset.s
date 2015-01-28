@@ -22,6 +22,7 @@ section .text
 _ft_memset:
 
 	push rdi
+	push rsi
 
 	cld
 	mov al, sil
@@ -29,6 +30,7 @@ _ft_memset:
 
 	rep stosb
 
+	pop rsi
 	pop rdi
 	mov rax, rdi
 

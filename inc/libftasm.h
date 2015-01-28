@@ -29,7 +29,6 @@ int     ft_toupper (int c);
 int     ft_tolower (int c);
 
 int     ft_puts (const char * str);
-int     ft_putsfd (const char * str, int fd);
 
 size_t  ft_strlen (const char * s);
 char *  ft_strcat (char * s1, const char * s2);
@@ -46,5 +45,6 @@ char *	ft_strncat (char * s1, const char * s2, size_t n);
 int			ft_strcmp (const char * s1, const char * s2);
 int			ft_strncmp (const char * s1, const char * s2, size_t n);
 int			ft_indexof (char * str, char c);
+int     ft_putsfd (const char * str, int fd);
 
 #endif

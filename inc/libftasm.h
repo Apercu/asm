@@ -32,8 +32,6 @@ int     ft_puts (const char * str);
 
 size_t  ft_strlen (const char * s);
 char *  ft_strcat (char * s1, const char * s2);
-char *	ft_strncat (char * s1, const char * s2, size_t n);
-int			ft_strcmp (const char *s1, const char *s2);
 
 void    ft_bzero (void * pt, size_t n);
 void *	ft_memset (void * b, int c, size_t len);
@@ -42,5 +40,9 @@ char *	ft_strdup (const char * s1);
 
 void		ft_cat (int fd);
 
+/* Bonus */
+char *	ft_strncat (char * s1, const char * s2, size_t n);
+int			ft_strcmp (const char *s1, const char *s2);
+int			ft_strncmp (const char *s1, const char *s2, size_t n);
 
 #endif

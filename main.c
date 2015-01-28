@@ -308,6 +308,43 @@ void check_strcmp (void)
 	printf("-----------------\n\n");
 }
 
+void check_strncmp (void)
+{
+	printf("----- STRNCMP ------\n");
+
+	char * a = "aaa";
+	char * b = "aaa";
+
+	printf("comparing %s with %s = %d (%d)\n", a, b, ft_strncmp(a, b, 3), strncmp(a, b, 3));
+
+	a = "abcdefg";
+	b = "abcdefg";
+
+	printf("comparing %s with %s = %d (%d)\n", a, b, ft_strncmp(a, b, 1), strncmp(a, b, 1));
+
+	a = "aaa";
+	b = "bbb";
+
+	printf("comparing %s with %s = %d (%d)\n", a, b, ft_strncmp(a, b, 2), strncmp(a, b, 2));
+
+	a = "bbb";
+	b = "aaa";
+
+	printf("comparing %s with %s = %d (%d)\n", a, b, ft_strncmp(a, b, 2), strncmp(a, b, 2));
+
+	a = "ballon";
+	b = "balthazar";
+
+	printf("comparing %s with %s = %d (%d)\n", a, b, ft_strncmp(a, b, 3), strncmp(a, b, 3));
+
+	a = "ballon";
+	b = "balthazar";
+
+	printf("comparing %s with %s = %d (%d)\n", a, b, ft_strncmp(a, b, 5), strncmp(a, b, 5));
+
+	printf("-----------------\n\n");
+}
+
 int main (void)
 {
 	/* Classic shit */
@@ -333,6 +370,7 @@ int main (void)
 	check_strncat();
 	check_strlen();
 	check_strcmp();
+	check_strncmp();
 
 	return 0;
 }

@@ -276,30 +276,63 @@ void check_strncat (void)
 	printf("-----------------\n\n");
 }
 
+void check_strcmp (void)
+{
+	printf("----- STRCMP ------\n");
+
+	char * a = "aaa";
+	char * b = "aaa";
+
+	printf("comparing %s with %s = %d (%d)\n", a, b, ft_strcmp(a, b), strcmp(a, b));
+
+	a = "abcdefg";
+	b = "abcdefg";
+
+	printf("comparing %s with %s = %d (%d)\n", a, b, ft_strcmp(a, b), strcmp(a, b));
+
+	a = "aaa";
+	b = "bbb";
+
+	printf("comparing %s with %s = %d (%d)\n", a, b, ft_strcmp(a, b), strcmp(a, b));
+
+	a = "bbb";
+	b = "aaa";
+
+	printf("comparing %s with %s = %d (%d)\n", a, b, ft_strcmp(a, b), strcmp(a, b));
+
+	a = "ballon";
+	b = "balthazar";
+
+	printf("comparing %s with %s = %d (%d)\n", a, b, ft_strcmp(a, b), strcmp(a, b));
+
+	printf("-----------------\n\n");
+}
+
 int main (void)
 {
 	/* Classic shit */
-/*	check_alpha();
+	check_alpha();
 	check_digit();
 	check_alnum();
 	check_ascii();
 	check_print();
 	check_toupper();
 	check_tolower();
-*/
+
 	/* Put */
-	//check_puts();
+	check_puts();
 
 	/* Memory */
-	/*check_bzero();
+	check_bzero();
 	check_memset();
 	check_memcpy();
 	check_strdup();
-*/
+
 	/* Strings */
-	//check_strcat();
-//	check_strncat();
+	check_strcat();
+	check_strncat();
 	check_strlen();
+	check_strcmp();
 
 	return 0;
 }
